@@ -23,7 +23,7 @@ def main():
     shutil.copytree(source, destination, dirs_exist_ok=args.update, ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
     if args.update:
         # Remove only obsolete files from earlier releases of this same skill.
-        for relative in ('assets/quiz-app/grading.js', 'assets/quiz-app/protocol.js', 'scripts/host_bridge.py', 'scripts/bridge.py', 'references/ai-grading.md', 'references/authoring.md'):
+        for relative in ('assets/quiz-app/grading.js', 'assets/quiz-app/protocol.js', 'assets/quiz-app/storage.js', 'scripts/host_bridge.py', 'scripts/bridge.py', 'references/ai-grading.md', 'references/authoring.md'):
             obsolete = destination / relative
             if obsolete.is_file(): obsolete.unlink()
     print(f'Installed: {destination.resolve()}')

@@ -6,8 +6,8 @@ from build_quiz import build_html, load_bank
 from browser_open import open_default_browser
 
 
-def make_server(bank=None, port=8765, demo=None):
-    document = build_html(bank,demo).encode('utf-8')
+def make_server(bank, port=8765):
+    document = build_html(bank).encode('utf-8')
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, *_args): pass
         def do_GET(self):
@@ -29,10 +29,10 @@ def make_server(bank=None, port=8765, demo=None):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('bank',nargs='?'); parser.add_argument('--demo'); parser.add_argument('--port', type=int, default=8765)
+    parser.add_argument('bank'); parser.add_argument('--port', type=int, default=8765)
     parser.add_argument('--no-open', action='store_true', help='Headless/automated checks only')
     args = parser.parse_args()
-    try: server = make_server(load_bank(args.bank) if args.bank else None, args.port,load_bank(args.demo) if args.demo else None)
+    try: server = make_server(load_bank(args.bank), args.port)
     except (OSError, ValueError) as error: parser.exit(1, f'Cannot start: {error}\n')
     url = f'http://127.0.0.1:{server.server_address[1]}'
     print(f'FinalHelp: {url}', flush=True)

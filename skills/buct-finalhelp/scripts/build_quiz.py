@@ -69,9 +69,8 @@ def fingerprint(bank):
     return hashlib.sha256(data.encode('utf-8')).hexdigest()[:24]
 
 
-def build_html(bank=None, demo=None):
-    if bank is not None: validate_bank(bank)
-    if demo is not None: validate_bank(demo)
+def build_html(bank):
+    validate_bank(bank)
     def payload(value):
         return json.dumps(value, ensure_ascii=False, allow_nan=False).replace('<', '\\u003c').replace('\u2028', '\\u2028').replace('\u2029', '\\u2029')
     vendor=ASSETS/'vendor'/'katex'
@@ -80,23 +79,22 @@ def build_html(bank=None, demo=None):
         encoded=base64.b64encode((vendor/match.group(1)).read_bytes()).decode('ascii')
         return f'src:url(data:font/woff2;base64,{encoded}) format("woff2")'
     css=re.sub(r'src:url\((fonts/[^)]+\.woff2)\)[^}]*',embed_font,css)
-    replacements = {'<!--TITLE-->': html.escape(bank['title'] if bank else 'BUCT FinalHelp · 互动刷题'),
-                    '/*BANK*/': payload(dict(bank,fingerprint=fingerprint(bank)) if bank else None), '/*DEMO*/': payload(demo),
+    replacements = {'<!--TITLE-->': html.escape(bank['title']),
+                    '/*BANK*/': payload(dict(bank,fingerprint=fingerprint(bank))),
                     '/*STYLE*/': css+'\n'+(ASSETS / 'style.css').read_text(encoding='utf-8'),
                     '/*KATEX*/': (vendor/'katex.min.js').read_text(encoding='utf-8').replace('</script','<\\/script'),
                     '/*MATH*/': (ASSETS/'math.js').read_text(encoding='utf-8'),
                     '/*BANKTOOLS*/': (ASSETS/'bank.js').read_text(encoding='utf-8'),
-                    '/*STORAGE*/': (ASSETS/'storage.js').read_text(encoding='utf-8'),
                     '/*CORE*/': (ASSETS / 'study.js').read_text(encoding='utf-8'),
                     '/*APP*/': (ASSETS / 'app.js').read_text(encoding='utf-8')}
-    return re.sub(r'<!--TITLE-->|/\*(?:STYLE|BANK|DEMO|KATEX|MATH|BANKTOOLS|STORAGE|CORE|APP)\*/', lambda m: replacements[m.group()], (ASSETS / 'index.html').read_text(encoding='utf-8'))
+    return re.sub(r'<!--TITLE-->|/\*(?:STYLE|BANK|KATEX|MATH|BANKTOOLS|CORE|APP)\*/', lambda m: replacements[m.group()], (ASSETS / 'index.html').read_text(encoding='utf-8'))
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('bank', type=Path, nargs='?'); parser.add_argument('--demo', type=Path); parser.add_argument('--output', required=True, type=Path)
+    parser.add_argument('bank', type=Path); parser.add_argument('--output', required=True, type=Path)
     args = parser.parse_args()
-    try: document = build_html(load_bank(args.bank) if args.bank else None, load_bank(args.demo) if args.demo else None)
+    try: document = build_html(load_bank(args.bank))
     except (ValueError, OSError) as error: parser.exit(1, f'Build rejected: {error}\n')
     args.output.parent.mkdir(parents=True, exist_ok=True); args.output.write_text(document, encoding='utf-8', newline='\n')
     print(f'Built fixed-answer practice page: {args.output.resolve()}')
