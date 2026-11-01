@@ -98,7 +98,7 @@ def main():
     args = parser.parse_args()
     try: document = build_html(load_bank(args.bank) if args.bank else None, load_bank(args.demo) if args.demo else None)
     except (ValueError, OSError) as error: parser.exit(1, f'Build rejected: {error}\n')
-    args.output.parent.mkdir(parents=True, exist_ok=True); args.output.write_text(document, encoding='utf-8')
+    args.output.parent.mkdir(parents=True, exist_ok=True); args.output.write_text(document, encoding='utf-8', newline='\n')
     print(f'Built fixed-answer practice page: {args.output.resolve()}')
 
 
