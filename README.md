@@ -1,24 +1,14 @@
 # BUCT FinalHelp
 
-**把课程资料变成能答题、能批改、能看解析的互动刷题系统。**
+**原 AI 出题时一次性备好答案与详细解析，网页点击即看，不显示分数。**
 
-这是可复用的 Codex Skill，附带实际可运行的网页模板。把课件、教材或笔记交给智能体后，可自动梳理知识点，也可指定章节、题型、数量和难度。支持 **选择、填空、判断、简答、计算** 五类题。
+把课程资料交给运行这个 Skill 的 AI，它会自动梳理知识点，或按指定章节、题型、难度和数量出题。支持选择、填空、判断、简答、计算五类题型。
 
-页面参考“期末综合互动刷题中心”的交互结构：顶部完成数、当前答对、历史错题；题型标签、章节与知识点筛选；逐题批改并在下方显示参考答案、解析和来源。进度保存在浏览器，可导出、导入、重练历史错题。桌面和手机均可使用。
+每道题生成时就同时完成固定参考答案、解题步骤、详细解释、自查要点、易错点和资料出处。网页只负责练习与呈现，不等待 AI 在线批改，不调用模型接口，也不要求 API 密钥或另选模型。
 
-![实际答题与题下解析界面](docs/preview.jpg)
+![点击即看固定答案与解析](docs/preview.jpg)
 
-## 直接体验
-
-下载或克隆仓库，直接双击 [`docs/index.html`](docs/index.html)，即可离线练习 10 道原创演示题。也可以用本地服务器：
-
-```sh
-python skills/buct-finalhelp/scripts/serve_quiz.py examples/demo-bank.json
-```
-
-然后打开 <http://127.0.0.1:8765>。基础功能只需 Python 3.10+，无第三方运行依赖、无需 API 密钥。Node.js 仅用于开发时运行评分测试。
-
-## 安装 Skill
+## 安装
 
 ```sh
 git clone https://github.com/peachjam-thl/buct-finalhelp.git
@@ -26,70 +16,55 @@ cd buct-finalhelp
 python scripts/install_skill.py
 ```
 
-安装器默认写入当前环境使用的 `$CODEX_HOME/skills`，未设置时使用 `~/.codex/skills`，并保护已存在的同名目录。采用 `.agents/skills` 目录的客户端可显式指定：
+已安装本 Skill 时，更新仓库后执行 `python scripts/install_skill.py --update`。默认目录为 `$CODEX_HOME/skills`，未设置时是 `~/.codex/skills`；也支持 `--target <skills目录>`。其他 AI 客户端可将 `skills/buct-finalhelp` 放入该客户端支持的 Skill 目录。Skill 要求宿主能够读取其说明，不保证所有聊天平台都支持安装目录。
+
+## 使用示例
+
+提交资料后告诉当前 AI：
+
+> 使用 $buct-finalhelp 分析这些课件，按知识点生成 20 道互动题。你在出题时同时准备好固定答案、解题步骤和详细解析。点击就能查看，不显示分数，在本地默认浏览器打开。
+
+> 只分析第三章，出 8 道填空、6 道判断、6 道计算。保留原资料的术语和公式，填空逐空给答案，计算题写清公式、代入、运算、结果与单位。
+
+交付物是 `analysis.md`（范围与知识点映射）、`bank.json`（题目与固定答案）、`index.html`（完整单文件网页）。扫描件分析需要宿主有 PDF/OCR 工具；网页本身不是 PDF 上传解析器。
+
+## 打开网页
+
+双击 [`docs/index.html`](docs/index.html) 即可离线使用原创演示题库。也可以运行：
 
 ```sh
-python scripts/install_skill.py --target /absolute/path/to/.agents/skills
+python skills/buct-finalhelp/scripts/serve_quiz.py examples/demo-bank.json
 ```
 
-也可以直接将 `skills/buct-finalhelp` 文件夹放入客户端支持的 Skill 目录。安装后在 Codex 中输入 `$buct-finalhelp`；如列表未刷新，重新打开对话或重启客户端。目录以你的客户端版本为准，参见 [官方 Skill 文档](https://learn.chatgpt.com/docs/build-skills)。
+服务自动通过系统默认浏览器打开页面，不指定 Chrome 或 Edge，不修改系统默认设置。Windows 使用 URL 关联，macOS 使用 `open`，Linux 使用 `xdg-open`。打开失败时提供本地地址供手动访问；自动验证或无桌面环境可使用 `--no-open`。
 
-## 使用方式
+已生成的 HTML 文件也可运行：
 
-把资料提交给智能体，并输入类似下面的请求：
+```sh
+python skills/buct-finalhelp/scripts/browser_open.py /absolute/path/to/index.html
+```
 
-> 使用 $buct-finalhelp 分析这些课件，先列出知识点与资料出处，再生成 20 道互动题，覆盖选择、填空、判断、简答和计算。每题提交后在下方给出解析。
+## 练习方式
 
-> 只分析第三章电容式传感器，出 8 道填空、6 道判断和 6 道计算题，难度以基础为主，公式和术语严格按课件。
+1. 按题型、章节或知识点筛选，先填写自己的答案。
+2. 点击 **查看答案与解析**，立即在本题下方显示原出题 AI 预先准备的内容，无需网络或模型在线。
+3. 对照自查要点，自行选择 **我已掌握** 或 **加入错题**。
+4. 筛选错题并重新练习；可保存、导入或导出学习进度。
 
-> 根据我的错题记录找出薄弱知识点，再出 10 道不同情境的题。把尚未语义复核的简答题单独列出来。
+页面不显示单题分值、总分或得分。顶部统计为已查看解析、已掌握（自评）、待复习；不会把用户自评包装成 AI 判断。所有题型都使用固定参考答案，填空、简答和计算题也不会卡在等待批改状态。
 
-Skill 的产物为 `analysis.md`（范围与知识点映射）、`bank.json`（可复查题库）、`index.html`（单文件练习页面）。**资料由智能体分析，页面不是把任意 PDF 拖入后就自动解析的独立应用。** 扫描资料需要调用环境有可用的 PDF/OCR 能力。
+用户另外要求时，当前 AI 可以在对话里详细判断某个回答；这不影响网页独立练习。实际题库应忠于用户资料；固定答案仍需出题 AI 核验，不能视为绝对无误。
 
-## 即时批改范围
+## 自建题库与验证
 
-| 题型 | 离线网页 | 可选 AI 模式 |
-| --- | --- | --- |
-| 单选/多选、判断 | 提交后即时判分 | 无需调用 AI |
-| 填空 | 逐空别名匹配、按空给分 | 等价答案可交给智能体复核 |
-| 数值计算 | 数值容差与显式单位核对 | 无需调用 AI |
-| 简答、计算步骤 | **规则初评，待语义复核** | 按 rubric 语义批改、部分给分和解释 |
-
-初评不计入“当前答对”和“历史错题”，避免关键词命中被误认为掌握。AI 失败时保留初评并明确提示失败。静态页面不直接调用模型，也不存储密钥。
-
-需要 AI 时，在启动本地服务的环境配置 `OPENAI_API_KEY` 和 `BUCT_MODEL`，再运行上述服务命令。`BUCT_MODEL` 必须是你有权限使用、支持 Responses API 和 Structured Outputs 的模型；没有配置时服务保持本地模式。模型调用可能产生 API 费用。详见 [AI 批改说明](skills/buct-finalhelp/references/ai-grading.md)。
-
-主观题提交时，服务将发送当前回答、题干、评分点和对应资料摘录到配置的 AI 端点。用户资料和学习记录默认留在本地；导出文件也包含学生回答，请按自己的需要保管。整个页面内有参考答案，适用于个人练习，不适用于正式考试认证。项目名称不代表北京化工大学官方项目或背书。
-
-## 生成自己的页面
-
-让 Skill 生成题库，或参考 [`examples/demo-bank.json`](examples/demo-bank.json) 和 [题库格式](skills/buct-finalhelp/references/bank-format.md) 编辑，然后执行：
+题库格式见 [说明](skills/buct-finalhelp/references/bank-format.md)，完整示例见 [demo-bank.json](examples/demo-bank.json)。
 
 ```sh
 python skills/buct-finalhelp/scripts/build_quiz.py private/bank.json --output private/index.html
-```
-
-`private/` 已被忽略，不会默认上传到 GitHub。构建时拒绝缺少来源、类型错误、错误引用、重复 ID、不正确容差或评分点总分不一致的题库。内容真实性和教学质量仍须按原始资料复核。
-
-题干支持纯文本、换行与 Unicode 公式；本模板未附带完整 LaTeX 渲染器。计算题填写纯数值和独立单位，不执行输入表达式，也不自动换算单位。
-
-## 结构与验证
-
-```text
-skills/buct-finalhelp/    Skill 入口、规则、构建器、服务和页面模板
-examples/                原创教学示例题库
-docs/index.html          可直接打开的单文件示例
-scripts/install_skill.py 本地安装器
-tests/                   评分、题库校验、API 契约和本地服务测试
-```
-
-```sh
 python -m unittest discover -s tests -v
-node --test tests/grading.test.cjs
+node --test tests/study.test.cjs
 ```
 
-仓库附 GitHub Actions 验证流程。API 测试使用模拟响应，不发送真实学生答案、不消耗模型额度。真实 API 的凭据、网络和模型权限须在使用环境验证。可选择将 `docs/` 发布到 GitHub Pages；静态托管只提供离线规则批改，AI 本地服务不随之部署。
+Python 3.10+，无第三方运行依赖；Node.js 只用于开发验证。模板支持纯文本、换行和 Unicode 公式，未附完整 LaTeX 渲染器。学习进度保存在当前浏览器，导出可备份；不同题库指纹和旧版评分记录不混用。
 
-具体完成项与验证边界见 [QA.md](QA.md)。
-
-MIT License。欢迎通过 Issue 报告可复现问题，或提交改进评分规则、题型和资料处理流程的 PR。请勿提交无权公开的课件、完整教材、私有试卷、密钥或学生学习记录。
+`private/`、`study-sessions/` 和学习进度文件默认被 Git 忽略。仓库仅包含代码、Skill 与原创演示，不代表真实考试范围，也不代表北京化工大学官方项目或背书。详见 [QA.md](QA.md)。MIT License。

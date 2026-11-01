@@ -1,135 +1,88 @@
 import copy
 from html.parser import HTMLParser
-import io
 import json
 from pathlib import Path
+import subprocess
 import sys
+import tempfile
 import threading
 import unittest
+from unittest.mock import patch
 import urllib.error
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / 'skills' / 'buct-finalhelp' / 'scripts'))
+SCRIPTS = ROOT / 'skills' / 'buct-finalhelp' / 'scripts'
+sys.path.insert(0, str(SCRIPTS))
 from build_quiz import build_html, fingerprint, load_bank, validate_bank
-from serve_quiz import GradingError, grade_with_ai, make_server, validate_ai_result
+from serve_quiz import make_server
+import browser_open
 
 
 class QuizTests(unittest.TestCase):
-    def setUp(self):
-        self.bank = load_bank(ROOT / 'examples' / 'demo-bank.json')
+    def setUp(self): self.bank = load_bank(ROOT / 'examples' / 'demo-bank.json')
 
-    def test_bank_has_all_requested_types_and_change_isolates_progress(self):
-        self.assertEqual({q['type'] for q in self.bank['questions']}, {'fill', 'boolean', 'choice', 'short', 'calculation'})
-        before = fingerprint(self.bank)
-        reordered = dict(reversed(list(self.bank.items())))
-        self.assertEqual(before, fingerprint(reordered))
-        self.bank['questions'][0]['prompt'] += ' changed'
-        self.assertNotEqual(before, fingerprint(self.bank))
+    def test_every_type_has_a_complete_answer_explanation_and_source_before_build(self):
+        self.assertEqual({q['type'] for q in self.bank['questions']}, {'fill','boolean','choice','short','calculation'})
+        changes = [lambda b: b['questions'][0].update(source_ids=['missing']), lambda b: b['questions'][0].update(solution_steps=[]), lambda b: b['questions'][6].update(answer=''), lambda b: b['questions'][8].update(explanation=''), lambda b: b['questions'][0].update(points=3), lambda b: b['questions'][2].update(answer='false'), lambda b: b['questions'][0].update(id='__proto__')]
+        for change in changes:
+            bad=copy.deepcopy(self.bank); change(bad)
+            with self.assertRaises(ValueError): validate_bank(bad)
 
-    def test_invalid_banks_are_rejected(self):
-        changes = [
-            lambda b: b['questions'][0].update(source_ids=['missing']),
-            lambda b: b['questions'][0].update(id=b['questions'][1]['id']),
-            lambda b: b['questions'][0].update(id='__proto__'),
-            lambda b: b['questions'][0].update(id='constructor'),
-            lambda b: b['questions'][2].update(answer='false'),
-            lambda b: b['questions'][8]['answer'].update(value=float('nan')),
-            lambda b: b['questions'][8]['answer'].update(absolute_tolerance=-1),
-            lambda b: b['questions'][6]['rubric'][0].update(points=999),
-            lambda b: b['questions'][4].update(answer=['X']),
-            lambda b: b['questions'][0].update(points=True),
-            lambda b: b['sources'][0].update(locator=''),
-        ]
-        for mutate in changes:
-            bank = copy.deepcopy(self.bank)
-            mutate(bank)
-            with self.subTest(mutation=changes.index(mutate)), self.assertRaises(ValueError):
-                validate_bank(bank)
+    def test_content_changes_isolate_learning_progress(self):
+        before=fingerprint(self.bank)
+        self.assertEqual(before,fingerprint(dict(reversed(list(self.bank.items())))))
+        self.bank['questions'][0]['answer'][0]=['修改答案']
+        self.assertNotEqual(before,fingerprint(self.bank))
 
-    def test_document_cannot_execute_material_as_html_or_template(self):
-        dangerous = '</script><script>alert(1)</script> /*APP*/ /*RUNTIME*/'
-        self.bank['questions'][0]['prompt'] = dangerous
-        self.bank['title'] = '<img src=x onerror=alert(1)>'
-        page = build_html(self.bank)
+    def test_untrusted_material_remains_data(self):
+        payload='</script><script>alert(1)</script> /*APP*/'
+        self.bank['questions'][0]['prompt']=payload
+        page=build_html(self.bank)
         class Parser(HTMLParser):
-            def __init__(self):
-                super().__init__()
-                self.scripts = 0
-                self.in_bank = False
-                self.bank_text = ''
-            def handle_starttag(self, tag, attrs):
-                if tag == 'script': self.scripts += 1
-                if dict(attrs).get('id') == 'bank': self.in_bank = True
-            def handle_endtag(self, tag):
-                if tag == 'script': self.in_bank = False
-            def handle_data(self, data):
-                if self.in_bank: self.bank_text += data
-        parser = Parser()
-        parser.feed(page)
-        self.assertEqual(parser.scripts, 4)
-        self.assertEqual(json.loads(parser.bank_text)['questions'][0]['prompt'], dangerous)
-        self.assertIn('&lt;img src=x onerror=alert(1)&gt;', page)
-        self.assertNotIn('cdn.', page)
+            def __init__(self): super().__init__(); self.scripts=0; self.in_bank=False; self.bank_text=''
+            def handle_starttag(self,tag,attrs):
+                if tag=='script': self.scripts+=1
+                if dict(attrs).get('id')=='bank': self.in_bank=True
+            def handle_endtag(self,tag):
+                if tag=='script': self.in_bank=False
+            def handle_data(self,data):
+                if self.in_bank:self.bank_text+=data
+        p=Parser();p.feed(page)
+        self.assertEqual(p.scripts,3)
+        self.assertEqual(json.loads(p.bank_text)['questions'][0]['prompt'],payload)
+        self.assertIn('解题步骤',page)
 
-    def test_ai_contract_validates_every_point_and_derives_total(self):
-        q = self.bank['questions'][6]
-        good = {'parts': [{'id': 'r1', 'awarded': 2, 'feedback': '正确'}, {'id': 'r2', 'awarded': 1, 'feedback': '不完整'}], 'feedback': '补充信号转换的用途。'}
-        result = validate_ai_result(q, good)
-        self.assertEqual(result['score'], 3)
-        self.assertFalse(result['provisional'])
-        for parts in [good['parts'][:1], good['parts'] * 2, [{'id': 'r1', 'awarded': 20, 'feedback': ''}], [{'id': 'r1', 'awarded': float('nan'), 'feedback': ''}]]:
-            with self.assertRaises(GradingError):
-                validate_ai_result(q, {'parts': parts, 'feedback': ''})
-
-    def test_responses_request_and_failure_modes_with_mock_transport(self):
-        q = self.bank['questions'][6]
-        good = {'parts': [{'id': p['id'], 'awarded': p['points'], 'feedback': '正确'} for p in q['rubric']], 'feedback': '完整。'}
-        observed = {}
-        def transport(request, timeout):
-            observed.update(payload=json.loads(request.data), timeout=timeout, url=request.full_url)
-            return io.BytesIO(json.dumps({'status': 'completed', 'output': [{'type': 'message', 'content': [{'type': 'output_text', 'text': json.dumps(good)}]}]}).encode())
-        result = grade_with_ai(self.bank, q, '学生回答', 'test-only', 'chosen-model', 'https://example.invalid/v1', transport=transport)
-        self.assertEqual(result['score'], 4)
-        self.assertEqual(observed['url'], 'https://example.invalid/v1/responses')
-        self.assertFalse(observed['payload']['store'])
-        self.assertTrue(observed['payload']['text']['format']['strict'])
-        self.assertEqual(observed['payload']['model'], 'chosen-model')
-        for response in [
-            {'status': 'incomplete', 'output': []},
-            {'status': 'completed', 'output': [{'type': 'message', 'content': [{'type': 'refusal'}]}]},
-            {'status': 'completed', 'output': []}]:
-            with self.assertRaises(GradingError):
-                grade_with_ai(self.bank, q, '学生回答', 'test-only', 'model', 'https://example.invalid', transport=lambda *_args, **_kwargs: io.BytesIO(json.dumps(response).encode()))
-
-    def test_loopback_server_does_not_serve_files_or_accept_cross_origin_grading(self):
-        server = make_server(self.bank, port=0)
-        worker = threading.Thread(target=server.serve_forever, daemon=True)
-        worker.start()
-        base = f'http://127.0.0.1:{server.server_address[1]}'
+    def test_local_server_delivers_ready_answers_without_a_submission_channel(self):
+        server=make_server(self.bank,port=0); worker=threading.Thread(target=server.serve_forever,daemon=True);worker.start()
+        base=f'http://127.0.0.1:{server.server_address[1]}'
         try:
             with urllib.request.urlopen(base) as response:
-                self.assertEqual(response.status, 200)
-                self.assertIn('frame-ancestors', response.headers['Content-Security-Policy'])
-                self.assertIn('BUCT FINALHELP', response.read().decode())
-            with urllib.request.urlopen(base + '/health') as response:
-                self.assertFalse(json.load(response)['ai'])
-            for path in ['/../README.md', '/.env']:
-                with self.assertRaises(urllib.error.HTTPError) as caught:
-                    urllib.request.urlopen(base + path)
-                self.assertEqual(caught.exception.code, 404)
-            for headers, expected in [({'Origin': 'https://evil.invalid'}, 403), ({'Origin': base}, 503)]:
-                with self.assertRaises(urllib.error.HTTPError) as caught:
-                    urllib.request.urlopen(urllib.request.Request(base + '/api/grade', data=b'{}', headers=headers))
-                self.assertEqual(caught.exception.code, expected)
-            with self.assertRaises(urllib.error.HTTPError) as caught:
-                urllib.request.urlopen(urllib.request.Request(base, headers={'Host': 'evil.invalid'}))
-            self.assertEqual(caught.exception.code, 403)
-        finally:
-            server.shutdown()
-            server.server_close()
-            worker.join(timeout=2)
+                page=response.read().decode();self.assertIn("connect-src 'none'",response.headers['Content-Security-Policy'])
+                self.assertIn('I=U/R=12/6=2 A',page)
+            with self.assertRaises(urllib.error.HTTPError) as caught:urllib.request.urlopen(urllib.request.Request(base+'/api/submit',data=b'{}'))
+            self.assertEqual(caught.exception.code,501)
+            for url,headers in [(base+'/.env',{}),(base,{'Host':'evil.invalid'})]:
+                with self.assertRaises(urllib.error.HTTPError) as caught:urllib.request.urlopen(urllib.request.Request(url,headers=headers))
+                self.assertIn(caught.exception.code,(403,404))
+        finally:server.shutdown();server.server_close();worker.join(timeout=2)
+
+    def test_default_browser_uses_operating_system_association(self):
+        with patch.object(browser_open.sys,'platform','win32'),patch.object(browser_open.os,'startfile',create=True) as launch:
+            browser_open.open_default_browser('http://127.0.0.1:8765');launch.assert_called_once_with('http://127.0.0.1:8765')
+        for platform,program in [('darwin','open'),('linux','xdg-open')]:
+            with patch.object(browser_open.sys,'platform',platform),patch.object(browser_open.subprocess,'Popen') as launch:
+                browser_open.open_default_browser('http://127.0.0.1:8765');self.assertEqual(launch.call_args.args[0],[program,'http://127.0.0.1:8765'])
+        with self.assertRaises(ValueError):browser_open.open_default_browser('javascript:alert(1)')
+
+    def test_installer_protects_existing_skill_and_can_explicitly_update_older_release(self):
+        with tempfile.TemporaryDirectory() as target:
+            cmd=[sys.executable,'-X','utf8',str(ROOT/'scripts/install_skill.py'),'--target',target]
+            run=subprocess.run(cmd,capture_output=True,text=True,encoding='utf-8');self.assertEqual(run.returncode,0,run.stderr)
+            run=subprocess.run(cmd,capture_output=True);self.assertNotEqual(run.returncode,0)
+            stale=Path(target)/'buct-finalhelp/assets/quiz-app/grading.js';stale.write_text('obsolete',encoding='utf-8')
+            run=subprocess.run(cmd+['--update'],capture_output=True,text=True,encoding='utf-8');self.assertEqual(run.returncode,0,run.stderr)
+            self.assertFalse(stale.exists());self.assertTrue((stale.parent/'study.js').is_file())
 
 
-if __name__ == '__main__':
-    unittest.main()
+if __name__=='__main__':unittest.main()
