@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title><!--TITLE--></title>
+  <style>/*STYLE*/</style>
+</head>
+<body>
+<main class="shell">
+  <header><div class="eyebrow">BUCT FINALHELP <span>资料驱动 · 即时反馈</span></div><h1 id="title"></h1><p id="subtitle"></p></header>
+  <section class="stats" aria-label="学习统计">
+    <div><strong id="completed">0</strong><span>已完成</span></div>
+    <div><strong id="correct">0</strong><span>当前答对</span></div>
+    <div><strong id="wrong">0</strong><span>历史错题</span></div>
+  </section>
+  <progress id="progress" max="1" value="0" aria-label="答题进度"></progress>
+  <nav id="types" class="tabs" aria-label="题型筛选"></nav>
+  <section class="filters" aria-label="筛选题目">
+    <select id="chapter" aria-label="章节筛选"></select>
+    <select id="knowledge" aria-label="知识点筛选"></select>
+    <label class="check"><input id="onlyWrong" type="checkbox">只看错题</label>
+  </section>
+  <div class="toolbar"><span id="mode"></span><div><button id="export" class="text-button">导出进度</button><button id="import" class="text-button">导入进度</button><button id="retry" class="text-button">重练错题</button></div></div>
+  <p id="notice" class="notice" role="status" aria-live="polite"></p>
+  <div class="list-heading"><h2 id="sectionTitle">全部题目</h2><span id="pageInfo"></span></div>
+  <section id="questions" aria-label="练习题目"></section>
+  <nav class="pagination" aria-label="分页"><button id="prev">上一页</button><span id="pageLabel"></span><button id="next">下一页</button></nav>
+  <footer>BUCT FinalHelp · 答案提交后显示解析 · 学习记录保存在当前浏览器<br><span>个人练习工具，题库中包含参考答案。不用于防作弊考试。</span></footer>
+</main>
+<input type="file" id="importFile" accept="application/json,.json" hidden>
+<script id="bank" type="application/json">/*BANK*/</script>
+<script>window.FINALHELP_RUNTIME = /*RUNTIME*/;</script>
+<script>/*CORE*/</script>
+<script>/*APP*/</script>
+</body>
+</html>

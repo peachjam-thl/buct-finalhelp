@@ -1,0 +1,4 @@
+interface:
+  display_name: "BUCT FinalHelp 期末刷题助手"
+  short_description: "从课程资料提取知识点，生成五类题型的互动练习，支持即时批改、题下解析和错题重练。"
+  default_prompt: "使用 $buct-finalhelp 分析我提交的课程资料，按知识点生成交互刷题页面，支持五种题型、即时批改和题下解析。"

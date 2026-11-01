@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>期末综合互动刷题中心</title>
+  <style>:root{font-family:"Segoe UI","Microsoft YaHei",system-ui,sans-serif;color:#36394f;background:#f2f3f7;font-size:16px;--muted:#7c8196;--line:#e3e5ed;--accent:#6056a7;--paper:#fcfcfe}
+*{box-sizing:border-box}body{margin:0;padding:28px 20px}button,input,textarea,select{font:inherit}button,select,input[type=checkbox],input[type=radio]{cursor:pointer}button{border:0;border-radius:24px;padding:12px 22px;color:var(--accent);background:#eeedf7}button:hover{background:#e3e0f2}button:disabled{cursor:default;opacity:.45}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #a397dd;outline-offset:3px}.shell{max-width:1120px;margin:0 auto;background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:34px 38px 24px}header{margin-bottom:26px}.eyebrow{font-size:12px;font-weight:700;letter-spacing:2px;color:var(--accent)}.eyebrow span{font-weight:400;letter-spacing:1px;margin-left:14px;color:var(--muted)}h1{font-size:32px;line-height:1.35;margin:12px 0;color:#42445c}header p{color:var(--muted);font-size:14px;margin:0;line-height:1.7}.stats{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;margin:22px 0 24px}.stats strong{display:block;font-size:38px;font-weight:600;letter-spacing:-1px;line-height:1.4}.stats span{display:block;color:var(--muted);margin-top:5px;font-size:15px}progress{display:block;border:0;width:100%;height:7px;appearance:none;border-radius:7px;overflow:hidden;background:#eeeff4}progress::-webkit-progress-bar{background:#eeeff4}progress::-webkit-progress-value{background:#a398d2;border-radius:7px}progress::-moz-progress-bar{background:#a398d2}.tabs{display:flex;flex-wrap:wrap;gap:7px;margin:23px 0 19px}.tabs button{background:transparent;color:var(--muted);padding:11px 18px;font-weight:600}.tabs button[aria-pressed=true]{background:#eeedf5;color:#4c476b}.filters{display:flex;gap:12px;align-items:center}.filters select{min-width:0;flex:1;appearance:auto;border:1px solid #dcdfe9;border-radius:24px;background:transparent;padding:13px 18px;color:#555b74}.filters .check{white-space:nowrap;display:flex;align-items:center;gap:8px;font-size:15px}.check input{accent-color:var(--accent);width:20px;height:20px}.toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:15px 0 12px;color:var(--muted);font-size:12px}.toolbar>div{display:flex;gap:3px}.text-button{background:transparent;padding:8px 10px;font-size:12px;color:#77738c;border-radius:8px}.notice{font-size:13px;line-height:1.7;color:#716642;margin:5px 0}.notice:empty{display:none}.list-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding:14px 0 18px}.list-heading h2{font-size:18px;margin:0}.list-heading span{font-size:13px;color:var(--muted)}.question{border-bottom:1px solid var(--line);padding:25px 0 27px}.meta{color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:10px;display:flex;gap:10px;flex-wrap:wrap}.prompt{font-weight:600;font-size:17px;line-height:1.8;margin:0 0 14px;white-space:pre-wrap;overflow-wrap:anywhere}.answer-row{display:flex;align-items:flex-end;gap:10px}.answer-fields{flex:1;min-width:0;display:grid;gap:8px}.answer-fields input,.answer-fields textarea{width:100%;border:1px solid #dcdfe9;background:#f8f9fc;border-radius:22px;padding:12px 17px;line-height:1.5;color:#3b4059;min-width:0}.answer-fields textarea{min-height:110px;resize:vertical;border-radius:16px}.answer-fields input::placeholder,.answer-fields textarea::placeholder{color:#a3a7b6}.blank-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}.numeric-fields{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:8px}.options{display:grid;gap:8px;flex:1;min-width:0}.option{display:flex;align-items:flex-start;gap:11px;border:1px solid #e4e5ed;border-radius:14px;padding:12px 16px;line-height:1.6;cursor:pointer}.option:has(input:checked){background:#f1eef9;border-color:#b8aed5}.option input{accent-color:var(--accent);margin-top:5px}.submit{flex-shrink:0;min-width:86px}.result{margin-top:16px;border-radius:16px;border:1px solid #e1e2ea;background:#f6f6fb;padding:17px 20px;font-size:14px;line-height:1.85;overflow-wrap:anywhere}.result.good{background:#eff7f2;border-color:#d6e8dc}.result.bad{background:#fcf3ef;border-color:#eddcd4}.result.provisional{background:#faf6eb;border-color:#e8ddbd}.result strong{display:block;margin-bottom:6px}.result p{margin:8px 0;white-space:pre-wrap}.result ul{padding-left:20px;margin:8px 0}.result details{color:#6d7389;font-size:12px}.result summary{cursor:pointer}.empty{text-align:center;padding:50px 12px;color:var(--muted);line-height:1.9}.pagination{display:flex;justify-content:center;align-items:center;gap:22px;margin:26px 0}.pagination span{font-size:13px;color:var(--muted)}footer{text-align:center;font-size:12px;color:#969aac;line-height:1.9;border-top:1px solid var(--line);padding-top:18px}footer span{font-size:11px}
+@media(max-width:640px){body{padding:10px}.shell{padding:22px 18px;border-radius:22px}h1{font-size:25px}.eyebrow{font-size:10px}.eyebrow span{display:block;margin:7px 0 0}.stats strong{font-size:30px}.stats span{font-size:12px}.tabs{gap:3px}.tabs button{padding:10px 12px;font-size:14px}.filters{flex-wrap:wrap;gap:10px}.filters select{flex-basis:calc(50% - 10px);font-size:13px;padding:12px}.filters .check{font-size:13px}.toolbar{margin-top:10px}.answer-row{flex-wrap:wrap}.answer-fields,.options{flex-basis:100%}.submit{margin-left:auto;padding:10px 24px}.blank-fields{grid-template-columns:1fr}.prompt{font-size:16px}.question{padding:22px 0}.result{padding:14px}.list-heading h2{font-size:16px}.pagination{gap:14px}.pagination button{padding:10px 17px}}
+</style>
+</head>
+<body>
+<main class="shell">
+  <header><div class="eyebrow">BUCT FINALHELP <span>资料驱动 · 即时反馈</span></div><h1 id="title"></h1><p id="subtitle"></p></header>
+  <section class="stats" aria-label="学习统计">
+    <div><strong id="completed">0</strong><span>已完成</span></div>
+    <div><strong id="correct">0</strong><span>当前答对</span></div>
+    <div><strong id="wrong">0</strong><span>历史错题</span></div>
+  </section>
+  <progress id="progress" max="1" value="0" aria-label="答题进度"></progress>
+  <nav id="types" class="tabs" aria-label="题型筛选"></nav>
+  <section class="filters" aria-label="筛选题目">
+    <select id="chapter" aria-label="章节筛选"></select>
+    <select id="knowledge" aria-label="知识点筛选"></select>
+    <label class="check"><input id="onlyWrong" type="checkbox">只看错题</label>
+  </section>
+  <div class="toolbar"><span id="mode"></span><div><button id="export" class="text-button">导出进度</button><button id="import" class="text-button">导入进度</button><button id="retry" class="text-button">重练错题</button></div></div>
+  <p id="notice" class="notice" role="status" aria-live="polite"></p>
+  <div class="list-heading"><h2 id="sectionTitle">全部题目</h2><span id="pageInfo"></span></div>
+  <section id="questions" aria-label="练习题目"></section>
+  <nav class="pagination" aria-label="分页"><button id="prev">上一页</button><span id="pageLabel"></span><button id="next">下一页</button></nav>
+  <footer>BUCT FinalHelp · 答案提交后显示解析 · 学习记录保存在当前浏览器<br><span>个人练习工具，题库中包含参考答案。不用于防作弊考试。</span></footer>
+</main>
+<input type="file" id="importFile" accept="application/json,.json" hidden>
+<script id="bank" type="application/json">{"version": 1, "id": "buct-finalhelp-demo", "title": "期末综合互动刷题中心", "subtitle": "原创演示题库 · 传感器与电路基础 · 用于展示五类题型，不代表任何课程考试范围", "sources": [{"id": "s1", "title": "FinalHelp 原创教学示例", "locator": "§1 传感器基础", "excerpt": "本示例采用常见的功能划分：传感器由敏感元件、转换元件和基本转换电路组成。敏感元件直接感受被测量；转换元件把其输出转换成适于传输、处理的信号。灵敏度描述输出变化量与对应输入变化量的比值；在线性区间可写为 K=Δy/Δx。量程、灵敏度和测量误差是不同指标，灵敏度高不保证测量误差小。"}, {"id": "s2", "title": "FinalHelp 原创教学示例", "locator": "§2 理想电阻电路", "excerpt": "本示例讨论恒温、理想欧姆电阻及直流稳态。欧姆定律为 U=IR；电阻功率 P=UI=I²R=U²/R。若 R=6 Ω 且 U=12 V，则 I=2 A，P=24 W。两个相同的理想电阻串联时，等效电阻为单个电阻的两倍。"}], "questions": [{"id": "fill-1", "type": "fill", "chapter": "第1章 传感器基础", "knowledge": ["传感器组成"], "difficulty": "基础", "prompt": "按本示例的功能划分，传感器通常由______、______和______组成。", "points": 3, "source_ids": ["s1"], "answer": [["敏感元件"], ["转换元件"], ["基本转换电路", "转换电路"]], "explanation": "三个组成部分依次承担感受被测量、转换信号和基本信号调理等功能。本题按给出的顺序逐空判分，每空 1 分。"}, {"id": "fill-2", "type": "fill", "chapter": "第2章 电路基础", "knowledge": ["欧姆定律"], "difficulty": "基础", "prompt": "理想欧姆电阻的电压、电流、电阻关系为 U=______（填写右侧代数表达式）。", "points": 1, "source_ids": ["s2"], "answer": [["IR", "I R", "I*R", "I×R", "I·R"]], "explanation": "在本题的理想欧姆电阻条件下 U=IR，式中 I 是电流，R 是电阻。接受列出的等价乘法写法。"}, {"id": "bool-1", "type": "boolean", "chapter": "第1章 传感器基础", "knowledge": ["测量指标"], "difficulty": "基础", "prompt": "传感器的灵敏度越高，测量误差就一定越小。", "points": 1, "source_ids": ["s1"], "answer": false, "explanation": "灵敏度反映输出对输入变化的响应程度，误差还受标定、噪声、漂移等影响，二者不能直接等同。题目中的“一定”不成立。"}, {"id": "bool-2", "type": "boolean", "chapter": "第2章 电路基础", "knowledge": ["电阻串联"], "difficulty": "基础", "prompt": "两个相同的理想电阻串联，等效电阻是单个电阻的两倍。", "points": 1, "source_ids": ["s2"], "answer": true, "explanation": "串联电阻相加，R总=R+R=2R。这里比较的是等效电阻，不是流过电阻的电流。"}, {"id": "choice-1", "type": "choice", "chapter": "第1章 传感器基础", "knowledge": ["传感器组成"], "difficulty": "基础", "prompt": "哪个部分直接感受被测量？", "points": 2, "source_ids": ["s1"], "multiple": false, "options": [{"id": "A", "text": "敏感元件"}, {"id": "B", "text": "显示屏"}, {"id": "C", "text": "外部通信网络"}], "answer": ["A"], "explanation": "敏感元件直接响应被测量。显示屏用于呈现信息，外部通信网络用于传输信息，都不等同于敏感元件。"}, {"id": "choice-2", "type": "choice", "chapter": "第2章 电路基础", "knowledge": ["电功率"], "difficulty": "进阶", "prompt": "对直流稳态理想欧姆电阻，哪些表达式可用于计算其消耗的电功率？（多选，全部选对得分）", "points": 3, "source_ids": ["s2"], "multiple": true, "options": [{"id": "A", "text": "P=UI"}, {"id": "B", "text": "P=I²R"}, {"id": "C", "text": "P=U/R"}, {"id": "D", "text": "P=U²/R"}], "answer": ["A", "B", "D"], "explanation": "由 P=UI 与 U=IR 可得到 I²R 和 U²/R。U/R 的单位为安培，表示电流，不是功率。"}, {"id": "short-1", "type": "short", "chapter": "第1章 传感器基础", "knowledge": ["传感器组成"], "difficulty": "进阶", "prompt": "分别说明敏感元件和转换元件的作用。", "points": 4, "source_ids": ["s1"], "answer": "敏感元件直接感受被测量；转换元件把敏感元件的输出转换为便于传输和处理的信号。", "rubric": [{"id": "r1", "description": "说明敏感元件直接感受被测量", "points": 2, "keywords": ["感受被测量", "响应被测量", "感受"]}, {"id": "r2", "description": "说明转换元件完成信号转换以便传输处理", "points": 2, "keywords": ["转换", "转化"]}], "explanation": "两者是不同的功能环节。不能只列出元件名称而不解释作用。关键词模式不能可靠区分“负责转换”和“不负责转换”，因此仅给初评。"}, {"id": "short-2", "type": "short", "chapter": "第1章 传感器基础", "knowledge": ["灵敏度"], "difficulty": "进阶", "prompt": "简述线性传感器灵敏度的含义，并写出用增量表示的公式。", "points": 4, "source_ids": ["s1"], "answer": "灵敏度是输出变化量与对应输入变化量的比值，K=Δy/Δx。", "rubric": [{"id": "r1", "description": "说明输出变化量与输入变化量的比值", "points": 2, "keywords": ["比值", "比率"]}, {"id": "r2", "description": "正确写出 K=Δy/Δx 或等价式", "points": 2, "keywords": ["Δy/Δx", "dy/dx", "输出变化量/输入变化量"]}], "explanation": "线性区间的输出增量与输入增量之比为常数。注意分子为输出变化量，分母为输入变化量，不能写反。"}, {"id": "calc-1", "type": "calculation", "chapter": "第2章 电路基础", "knowledge": ["欧姆定律"], "difficulty": "基础", "prompt": "理想电阻 R=6 Ω，两端直流电压 U=12 V。求电流 I，数值填入第一个框，单位填 A。允许绝对误差 0.01 A。", "points": 3, "source_ids": ["s2"], "answer": {"value": 2, "unit": "A", "unit_aliases": ["安培"], "absolute_tolerance": 0.01, "relative_tolerance": 0}, "explanation": "I=U/R=12/6=2 A。本题要求安培，若写成毫安须先换算再填写；模板不自动换算单位。"}, {"id": "calc-2", "type": "calculation", "chapter": "第2章 电路基础", "knowledge": ["电功率", "欧姆定律"], "difficulty": "综合", "prompt": "理想电阻 R=6 Ω，两端直流电压 U=12 V。求其电功率，填写数值、单位 W，并写出公式与代入步骤。", "points": 6, "source_ids": ["s2"], "answer": {"value": 24, "unit": "W", "unit_aliases": ["瓦", "瓦特"], "absolute_tolerance": 0.01, "relative_tolerance": 0}, "reference_answer": "P=U²/R=12²/6=24 W；或先求 I=U/R=2 A，再用 P=UI=24 W。", "rubric": [{"id": "r1", "description": "选择适用的电功率公式", "points": 2, "keywords": ["U²/R", "U^2/R", "UI", "I²R", "I^2R"]}, {"id": "r2", "description": "正确代入数值并计算", "points": 2, "keywords": ["12", "144/6"]}, {"id": "r3", "description": "得出 24 W 并写明正确单位", "points": 2, "keywords": ["24 W", "24W", "24 瓦", "24瓦"]}], "explanation": "可直接用 P=U²/R，也可先求电流再计算功率。AI 模式按公式、代入和结果三点评分，允许等价解法；本地仅进行规则初评并单独核对数值。"}], "fingerprint": "91536d5d9e3a1d95fa05d1c5"}</script>
+<script>window.FINALHELP_RUNTIME = {"ai": false};</script>
+<script>(function (root) {
+  'use strict';
+  const text = value => String(value ?? '').normalize('NFKC').trim();
+  const normalize = value => text(value).toLocaleLowerCase();
+  const score = (q, points, provisional = false, details = []) => ({
+    score: Math.abs(points - q.points) < 1e-8 ? q.points : Number(points.toFixed(8)), max: q.points, provisional,
+    method: provisional ? 'rule-preliminary' : 'local', details
+  });
+  function numeric(q, input) {
+    const raw = text(input?.value);
+    const valid = /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/.test(raw);
+    const value = Number(raw);
+    const a = q.answer;
+    const unit = text(input?.unit); // SI units are case-sensitive: m != M.
+    const unitOK = [a.unit, ...(a.unit_aliases || [])].some(u => text(u) === unit);
+    const tolerance = Math.max(a.absolute_tolerance, a.relative_tolerance * Math.abs(a.value));
+    const rounding = Number.EPSILON * Math.max(1, Math.abs(value), Math.abs(a.value)) * 4;
+    return {ok: valid && Number.isFinite(value) && Math.abs(value - a.value) <= tolerance + rounding && unitOK,
+      note: !valid || !Number.isFinite(value) ? '请输入有限数值，支持科学计数法。' : !unitOK ? '单位不匹配；请按题目要求填写单位。' : '已按题库设置的误差范围核对数值。'};
+  }
+  function grade(q, input) {
+    if (q.type === 'choice') {
+      const actual = Array.isArray(input) ? [...new Set(input)].sort() : [];
+      const expected = [...q.answer].sort();
+      return score(q, JSON.stringify(actual) === JSON.stringify(expected) ? q.points : 0);
+    }
+    if (q.type === 'boolean') return score(q, typeof input === 'boolean' && input === q.answer ? q.points : 0);
+    if (q.type === 'fill') {
+      const details = q.answer.map((aliases, i) => ({label: `第 ${i + 1} 空`, ok: aliases.some(alias => normalize(alias) === normalize(input?.[i]))}));
+      return score(q, details.filter(d => d.ok).length / details.length * q.points, false, details);
+    }
+    if (q.type === 'calculation' && !q.rubric) {
+      const result = numeric(q, input);
+      return score(q, result.ok ? q.points : 0, false, [{label: result.note, ok: result.ok}]);
+    }
+    // Keyword hits are an explicitly provisional aid, never semantic certification.
+    const answer = normalize(q.type === 'short' ? input : input?.steps);
+    const details = q.rubric.map(r => ({id: r.id, label: r.description,
+      ok: r.keywords.some(k => answer.includes(normalize(k))), points: r.points}));
+    const result = score(q, details.reduce((sum, d) => sum + (d.ok ? d.points : 0), 0), true, details);
+    if (q.type === 'calculation') result.numeric = numeric(q, input);
+    return result;
+  }
+  root.FinalHelpGrading = {grade, numeric, normalize};
+  if (typeof module !== 'undefined' && module.exports) module.exports = root.FinalHelpGrading;
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+</script>
+<script>(() => {
+  'use strict';
+  const bank = JSON.parse(document.getElementById('bank').textContent);
+  const runtime = window.FINALHELP_RUNTIME || {ai: false};
+  const labels = {all: '全部', fill: '填空题', boolean: '判断题', choice: '选择题', short: '简答题', calculation: '计算题'};
+  const byId = new Map(bank.questions.map(q => [q.id, q]));
+  const key = `buct-finalhelp:${bank.fingerprint}`;
+  const $ = id => document.getElementById(id);
+  const create = (tag, text, className) => {
+    const el = document.createElement(tag);
+    if (text !== undefined) el.textContent = text;
+    if (className) el.className = className;
+    return el;
+  };
+  const fresh = () => ({version: 1, fingerprint: bank.fingerprint, drafts: {}, results: {}, history: []});
+  let state = fresh();
+  let view = {type: 'all', chapter: '', knowledge: '', wrong: false, page: 0};
+  let generation = 0;
+  const size = 6;
+  function validDraft(q, answer) {
+    if (q.type === 'choice') return Array.isArray(answer) && answer.every(a => q.options.some(o => o.id === a));
+    if (q.type === 'boolean') return typeof answer === 'boolean';
+    if (q.type === 'fill') return Array.isArray(answer) && answer.length === q.answer.length && answer.every(a => typeof a === 'string' && a.length <= 10000);
+    if (q.type === 'short') return typeof answer === 'string' && answer.length <= 20000;
+    return answer && typeof answer === 'object' && ['value', 'unit', ...(q.rubric ? ['steps'] : [])].every(f => typeof answer[f] === 'string' && answer[f].length <= 20000);
+  }
+  function parseState(raw) {
+    if (!raw || raw.version !== 1 || raw.fingerprint !== bank.fingerprint) throw new Error('题库版本不同，无法混用学习记录。');
+    const clean = fresh();
+    for (const q of bank.questions) {
+      const draft = raw.drafts?.[q.id];
+      if (!validDraft(q, draft)) continue;
+      clean.drafts[q.id] = draft;
+      const r = raw.results?.[q.id];
+      if (!r || r.answerKey !== JSON.stringify(draft)) continue;
+      if (r.method === 'local' || r.method === 'rule-preliminary') {
+        clean.results[q.id] = {...FinalHelpGrading.grade(q, draft), answerKey: r.answerKey};
+      } else if (r.method === 'ai' && r.provisional === false && r.max === q.points && Number.isFinite(r.score) && r.score >= 0 && r.score <= q.points && typeof r.feedback === 'string' && r.feedback.length <= 20000) {
+        clean.results[q.id] = {method: 'ai', provisional: false, max: q.points, score: r.score, feedback: r.feedback, answerKey: r.answerKey};
+      }
+    }
+    clean.history = [...new Set((Array.isArray(raw.history) ? raw.history : []).filter(id => byId.has(id)))];
+    return clean;
+  }
+  function notify(message) { $('notice').textContent = message; }
+  function save() {
+    try { localStorage.setItem(key, JSON.stringify(state)); }
+    catch { notify('浏览器无法保存学习记录。请在关闭页面前导出进度。'); }
+  }
+  try {
+    const saved = localStorage.getItem(key);
+    if (saved) state = parseState(JSON.parse(saved));
+  } catch { notify('无法读取上次进度，本次从空白记录开始。可尝试导入已导出的进度。'); }
+  $('title').textContent = bank.title;
+  $('subtitle').textContent = bank.subtitle || '按知识点练习，让每一道错题都有可核对的答案。';
+  $('mode').textContent = runtime.ai ? 'AI 语义批改已启用 · 主观题提交后发送当前回答及题目资料给 AI 服务' : '本地即时批改 · 简答与步骤题为规则初评，可导出后交给 AI 复核';
+  function stats() {
+    const results = Object.values(state.results);
+    $('completed').textContent = `${results.length}/${bank.questions.length}`;
+    $('correct').textContent = results.filter(r => !r.provisional && r.score === r.max).length;
+    $('wrong').textContent = state.history.length;
+    $('progress').max = bank.questions.length;
+    $('progress').value = results.length;
+  }
+  function selectOptions(id, title, values) {
+    $(id).replaceChildren();
+    const all = create('option', title); all.value = ''; $(id).append(all);
+    values.forEach(value => {const option = create('option', value); option.value = value; $(id).append(option);});
+  }
+  selectOptions('chapter', '全部章节', [...new Set(bank.questions.map(q => q.chapter))]);
+  selectOptions('knowledge', '全部知识点', [...new Set(bank.questions.flatMap(q => q.knowledge))]);
+  Object.entries(labels).forEach(([type, label]) => {
+    const count = type === 'all' ? bank.questions.length : bank.questions.filter(q => q.type === type).length;
+    if (!count) return;
+    const button = create('button', `${label} ${count}`);
+    button.dataset.type = type;
+    button.addEventListener('click', () => {view.type = type; view.page = 0; render();});
+    $('types').append(button);
+  });
+  function reference(q) {
+    if (q.type === 'choice') return q.answer.map(id => `${id}. ${q.options.find(o => o.id === id).text}`).join('；');
+    if (q.type === 'fill') return q.answer.map((a, i) => `第 ${i + 1} 空：${a.join(' / ')}`).join('；');
+    if (q.type === 'boolean') return q.answer ? '正确' : '错误';
+    if (q.type === 'calculation') return `${q.answer.value} ${q.answer.unit}${q.reference_answer ? '\n' + q.reference_answer : ''}`;
+    return q.answer;
+  }
+  function feedback(q, r) {
+    const kind = r.provisional ? 'provisional' : r.score === r.max ? 'good' : 'bad';
+    const box = create('div', undefined, `result ${kind}`);
+    box.setAttribute('aria-live', 'polite');
+    box.append(create('strong', `${r.provisional ? '规则初评 · 待语义复核' : r.method === 'ai' ? 'AI 批改' : r.score === r.max ? '回答正确' : '本次有错漏'}　${r.score} / ${r.max} 分`));
+    if (r.provisional) box.append(create('p', '此分数只反映关键词匹配，无法识别否定、矛盾或所有等价表述，不计入当前答对与历史错题。'));
+    if (r.feedback) box.append(create('p', r.feedback));
+    if (r.details?.length) {
+      const list = create('ul');
+      r.details.forEach(d => list.append(create('li', `${d.ok ? '✓' : '○'} ${d.label}${d.points ? `（${d.points} 分）` : ''}`)));
+      box.append(list);
+    }
+    if (r.numeric) box.append(create('p', `数值核对：${r.numeric.ok ? '结果及单位匹配。' : '结果或单位不匹配。'} ${r.numeric.note}`));
+    box.append(create('p', `参考答案：${reference(q)}`));
+    box.append(create('p', `解析：${q.explanation}`));
+    const details = create('details'); details.append(create('summary', '查看资料依据'));
+    q.source_ids.forEach(id => {
+      const source = bank.sources.find(s => s.id === id);
+      details.append(create('p', `${source.title} · ${source.locator}\n${source.excerpt}`));
+    });
+    box.append(details);
+    return box;
+  }
+  function card(q, index) {
+    const item = create('article', undefined, 'question');
+    item.dataset.question = q.id;
+    item.append(create('div', `${q.chapter} · 第 ${index + 1} 题 · ${labels[q.type]} · ${q.difficulty} · ${q.points} 分`, 'meta'));
+    const prompt = create('h3', q.prompt, 'prompt');
+    prompt.id = `prompt-${q.id}`; item.append(prompt);
+    item.append(create('div', q.knowledge.join(' / '), 'meta'));
+    const form = create('form', undefined, 'answer-row'); form.setAttribute('aria-labelledby', prompt.id);
+    const controls = create('div', undefined, q.type === 'choice' || q.type === 'boolean' ? 'options' : 'answer-fields');
+    const draft = state.drafts[q.id];
+    let read;
+    if (q.type === 'choice' || q.type === 'boolean') {
+      const options = q.type === 'choice' ? q.options : [{id: true, text: '正确'}, {id: false, text: '错误'}];
+      const inputs = options.map(o => {
+        const label = create('label', undefined, 'option'); const input = create('input');
+        input.type = q.type === 'choice' && q.multiple ? 'checkbox' : 'radio';
+        input.name = q.id;
+        input.checked = q.type === 'choice' ? (draft || []).includes(o.id) : draft === o.id;
+        label.append(input, create('span', q.type === 'choice' ? `${o.id}. ${o.text}` : o.text));
+        controls.append(label); return {input, value: o.id};
+      });
+      read = () => q.type === 'choice' ? inputs.filter(x => x.input.checked).map(x => x.value) : inputs.find(x => x.input.checked)?.value;
+    } else if (q.type === 'fill') {
+      const blanks = create('div', undefined, 'blank-fields');
+      const inputs = q.answer.map((_, i) => {
+        const input = create('input'); input.type = 'text'; input.placeholder = `第 ${i + 1} 空`;
+        input.setAttribute('aria-label', `第 ${index + 1} 题第 ${i + 1} 空`);
+        input.value = draft?.[i] || ''; input.maxLength = 10000; blanks.append(input); return input;
+      });
+      controls.append(blanks); read = () => inputs.map(input => input.value);
+    } else if (q.type === 'short') {
+      const input = create('textarea'); input.placeholder = '分点填写你的理解，等价表述可提交 AI 复核';
+      input.setAttribute('aria-label', `第 ${index + 1} 题答案`); input.value = draft || ''; input.maxLength = 20000;
+      controls.append(input); read = () => input.value;
+    } else {
+      const fields = create('div', undefined, 'numeric-fields');
+      const value = create('input'); value.type = 'text'; value.inputMode = 'decimal'; value.placeholder = '数值，例如 2 或 2e-3'; value.value = draft?.value || ''; value.maxLength = 1000;
+      value.setAttribute('aria-label', `第 ${index + 1} 题数值`);
+      const unit = create('input'); unit.type = 'text'; unit.placeholder = q.answer.unit ? '单位（区分大小写）' : '无量纲可留空'; unit.value = draft?.unit || ''; unit.maxLength = 100;
+      unit.setAttribute('aria-label', `第 ${index + 1} 题单位`);
+      fields.append(value, unit); controls.append(fields);
+      let steps;
+      if (q.rubric) {steps = create('textarea'); steps.placeholder = '写出公式、代入和必要计算步骤'; steps.setAttribute('aria-label', `第 ${index + 1} 题计算步骤`); steps.value = draft?.steps || ''; steps.maxLength = 20000; controls.append(steps);}
+      read = () => ({value: value.value, unit: unit.value, ...(steps ? {steps: steps.value} : {})});
+    }
+    const button = create('button', '批改', 'submit'); button.type = 'submit';
+    const ready = () => {
+      const answer = read();
+      return q.type === 'fill' ? answer.every(s => s.trim()) : q.type === 'choice' ? answer.length > 0 : q.type === 'boolean' ? typeof answer === 'boolean' : q.type === 'short' ? !!answer.trim() : !!answer.value.trim() && (!q.rubric || !!answer.steps.trim());
+    };
+    button.disabled = !ready();
+    const edited = () => {
+      state.drafts[q.id] = read(); delete state.results[q.id];
+      item.querySelector('.result')?.remove(); button.disabled = !ready(); stats(); save();
+    };
+    controls.addEventListener('input', edited);
+    form.append(controls, button); item.append(form);
+    if (state.results[q.id]) item.append(feedback(q, state.results[q.id]));
+    form.addEventListener('submit', async event => {
+      event.preventDefault(); if (!ready()) return;
+      const answer = read(); const answerKey = JSON.stringify(answer); const startedGeneration = generation;
+      state.drafts[q.id] = answer;
+      let result = FinalHelpGrading.grade(q, answer);
+      if (result.provisional && runtime.ai) {
+        button.disabled = true; button.textContent = '批改中…';
+        for (const input of controls.querySelectorAll('input,textarea')) input.disabled = true;
+        const controller = new AbortController(); const timeout = setTimeout(() => controller.abort(), 125000);
+        try {
+          const response = await fetch('/api/grade', {method: 'POST', headers: {'Content-Type': 'application/json', 'X-FinalHelp-Token': runtime.token}, body: JSON.stringify({question_id: q.id, answer}), signal: controller.signal});
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.error || 'AI 暂不可用');
+          if (data.method !== 'ai' || data.provisional !== false || data.max !== q.points || !Number.isFinite(data.score) || data.score < 0 || data.score > q.points || typeof data.feedback !== 'string') throw new Error('AI 返回格式不正确');
+          result = data;
+        } catch (error) {result.feedback = `AI 批改未完成，以下仅为规则初评。${error.name === 'AbortError' ? '请求超时，请稍后重试。' : error.message}`;}
+        finally {clearTimeout(timeout); button.disabled = false; button.textContent = '批改'; for (const input of controls.querySelectorAll('input,textarea')) input.disabled = false;}
+      }
+      if (startedGeneration !== generation || JSON.stringify(state.drafts[q.id]) !== answerKey) return;
+      state.results[q.id] = {...result, answerKey};
+      if (!result.provisional && result.score < result.max && !state.history.includes(q.id)) state.history.push(q.id);
+      save(); stats(); item.querySelector('.result')?.remove(); item.append(feedback(q, result));
+    });
+    return item;
+  }
+  function render() {
+    const filtered = bank.questions.filter(q => (view.type === 'all' || q.type === view.type) && (!view.chapter || q.chapter === view.chapter) && (!view.knowledge || q.knowledge.includes(view.knowledge)) && (!view.wrong || state.history.includes(q.id)));
+    const pages = Math.max(1, Math.ceil(filtered.length / size)); view.page = Math.min(view.page, pages - 1);
+    for (const button of $('types').children) button.setAttribute('aria-pressed', button.dataset.type === view.type ? 'true' : 'false');
+    $('sectionTitle').textContent = `${view.wrong ? '错题重练 · ' : ''}${view.type === 'all' ? '全部题目' : labels[view.type]}`;
+    $('pageInfo').textContent = `${filtered.length} 题 · 第 ${view.page + 1}/${pages} 页`;
+    $('pageLabel').textContent = `${view.page + 1} / ${pages}`;
+    $('prev').disabled = view.page === 0; $('next').disabled = view.page >= pages - 1;
+    $('questions').replaceChildren();
+    filtered.slice(view.page * size, (view.page + 1) * size).forEach(q => $('questions').append(card(q, bank.questions.indexOf(q))));
+    if (!filtered.length) $('questions').append(create('p', view.wrong ? '当前筛选下没有历史错题。主观题初评不计为确认错题。' : '没有符合条件的题目，请调整题型、章节或知识点。', 'empty'));
+    stats();
+  }
+  ['chapter', 'knowledge'].forEach(id => $(id).addEventListener('change', () => {view[id] = $(id).value; view.page = 0; render();}));
+  $('onlyWrong').addEventListener('change', () => {view.wrong = $('onlyWrong').checked; view.page = 0; render();});
+  $('prev').addEventListener('click', () => {view.page--; render();});
+  $('next').addEventListener('click', () => {view.page++; render();});
+  $('retry').addEventListener('click', () => {
+    if (!state.history.length) {notify('还没有确认错题。先完成几道客观题，或启用 AI 批改主观题。'); return;}
+    generation++;
+    state.history.forEach(id => {delete state.drafts[id]; delete state.results[id];});
+    view = {type: 'all', chapter: '', knowledge: '', wrong: true, page: 0};
+    $('chapter').value = ''; $('knowledge').value = ''; $('onlyWrong').checked = true;
+    notify('已清空历史错题的本轮答案，保留其他题目进度。'); save(); render();
+  });
+  $('export').addEventListener('click', () => {
+    const blob = new Blob([JSON.stringify({...state, exported_at: new Date().toISOString()}, null, 2)], {type: 'application/json'});
+    const url = URL.createObjectURL(blob); const link = create('a'); link.href = url; link.download = `${bank.id.replace(/[^a-z0-9_-]/gi, '_')}.answers.json`;
+    document.body.append(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+    notify('已导出当前题库的学习记录。');
+  });
+  $('import').addEventListener('click', () => $('importFile').click());
+  $('importFile').addEventListener('change', async () => {
+    const file = $('importFile').files[0]; if (!file) return;
+    try {
+      if (file.size > 10000000) throw new Error('记录文件过大，最多允许 10 MB。');
+      const imported = parseState(JSON.parse(await file.text()));
+      if (!confirm('导入会替换当前题库的学习进度。建议先导出当前进度。继续吗？')) return;
+      generation++; state = imported; save(); render(); notify('学习进度已恢复。');
+    } catch (error) {notify(`导入失败：${error.message}`);}
+    finally {$('importFile').value = '';}
+  });
+  render();
+})();
+</script>
+</body>
+</html>
