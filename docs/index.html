@@ -16,7 +16,7 @@
   <header><div class="eyebrow">BUCT FINALHELP <span>资料驱动 · 即时反馈</span></div><h1 id="title"></h1><p id="subtitle"></p></header>
   <section class="stats" aria-label="学习统计">
     <div><strong id="completed">0</strong><span>已查看解析</span></div>
-    <div><strong id="correct">0</strong><span>已掌握（自评）</span></div>
+    <div><strong id="correct">0</strong><span>已掌握</span></div>
     <div><strong id="wrong">0</strong><span>待复习</span></div>
   </section>
   <progress id="progress" max="1" value="0" aria-label="答题进度"></progress>
@@ -26,16 +26,16 @@
     <select id="knowledge" aria-label="知识点筛选"></select>
     <label class="check"><input id="onlyWrong" type="checkbox">只看错题</label>
   </section>
-  <div class="toolbar"><span id="mode">答案与解析由出题 AI 预先准备 · 点击即看 · 无需在线批改</span><div><button id="export" class="text-button">导出进度</button><button id="import" class="text-button">导入进度</button><button id="retry" class="text-button">重练错题</button></div></div>
+  <div class="toolbar"><span id="mode">选择、填空、判断自动核对并收录错题 · 简答、计算自行对照 · 不显示分数</span><div><button id="export" class="text-button">导出进度</button><button id="import" class="text-button">导入进度</button><button id="retry" class="text-button">重练错题</button></div></div>
   <p id="notice" class="notice" role="status" aria-live="polite"></p>
   <div class="list-heading"><h2 id="sectionTitle">全部题目</h2><span id="pageInfo"></span></div>
   <section id="questions" aria-label="练习题目"></section>
   <nav class="pagination" aria-label="分页"><button id="prev">上一页</button><span id="pageLabel"></span><button id="next">下一页</button></nav>
-  <footer>BUCT FinalHelp · 原出题 AI 已备好固定答案与解析 · 不显示分数<br><span>掌握情况由你自评，学习记录保存在当前浏览器。</span></footer>
+  <footer>BUCT FinalHelp · 原出题 AI 已备好固定答案与解析 · 不显示分数<br><span>选择、填空、判断自动核对；简答、计算自评。学习记录保存在当前浏览器。</span></footer>
 </main>
 <input type="file" id="importFile" accept="application/json,.json" hidden>
 <script id="bank" type="application/json">{"version": 2, "id": "buct-finalhelp-demo", "title": "期末综合互动刷题中心", "subtitle": "原创演示题库 · 传感器与电路基础 · 答案和解析已由出题 AI 预先准备", "author": "当前出题 AI", "sources": [{"id": "s1", "title": "FinalHelp 原创教学示例", "locator": "§1 传感器基础", "excerpt": "本示例采用常见的功能划分：传感器由敏感元件、转换元件和基本转换电路组成。敏感元件直接感受被测量；转换元件把其输出转换成适于传输、处理的信号。灵敏度描述输出变化量与对应输入变化量的比值；在线性区间可写为 K=Δy/Δx。量程、灵敏度和测量误差是不同指标，灵敏度高不保证测量误差小。"}, {"id": "s2", "title": "FinalHelp 原创教学示例", "locator": "§2 理想电阻电路", "excerpt": "本示例讨论恒温、理想欧姆电阻及直流稳态。欧姆定律为 U=IR；电阻功率 P=UI=I²R=U²/R。若 R=6 Ω 且 U=12 V，则 I=2 A，P=24 W。两个相同的理想电阻串联时，等效电阻为单个电阻的两倍。"}], "questions": [{"id": "fill-1", "type": "fill", "chapter": "第1章 传感器基础", "knowledge": ["传感器组成"], "difficulty": "基础", "prompt": "按本示例的功能划分，传感器通常由______、______和______组成。", "source_ids": ["s1"], "answer": [["敏感元件"], ["转换元件"], ["基本转换电路", "转换电路"]], "solution_steps": ["先识别直接感受被测量的功能环节，对应敏感元件。", "再识别把前一环节输出转换成所需信号的环节，对应转换元件。", "最后补全基本转换电路这一环节，按题目顺序填写三个名称。"], "explanation": "题目要求填写组成部分的名称，而不是组成部分的个数。按本示例的功能划分，固定答案依次为敏感元件、转换元件、基本转换电路。前两个名称分别强调感受与转换功能；第三个名称按资料写为基本转换电路。", "checkpoints": ["三个空均填写元件或电路名称。", "顺序与参考答案对应，第三空可按资料写“基本转换电路”。"], "common_mistakes": ["填入“1、1、1”等数量，未回答各部分名称。", "把敏感元件与转换元件的作用或顺序混淆。"]}, {"id": "fill-2", "type": "fill", "chapter": "第2章 电路基础", "knowledge": ["欧姆定律"], "difficulty": "基础", "prompt": "理想欧姆电阻的电压、电流、电阻关系为 U=______（填写右侧代数表达式）。", "source_ids": ["s2"], "answer": [["IR", "I×R", "I·R", "I*R"]], "solution_steps": ["确认讨论对象是理想欧姆电阻。", "由 U=IR 可知右侧是电流与电阻的乘积，填写 IR 或等价乘法形式。"], "explanation": "资料给出的欧姆定律为 U=IR，I 表示电流、R 表示电阻。题干已写出 U=，只需补全右侧 IR；若写成 I×R 等等价乘法形式，含义相同。", "checkpoints": ["表达式表示电流乘电阻。", "区分 U=IR、I=U/R 与 R=U/I 三种变形。"], "common_mistakes": ["填成 I/R，把乘法写成除法。", "只写 I 或 R，遗漏另一个量。"]}, {"id": "bool-1", "type": "boolean", "chapter": "第1章 传感器基础", "knowledge": ["测量指标"], "difficulty": "基础", "prompt": "传感器的灵敏度越高，测量误差就一定越小。", "source_ids": ["s1"], "answer": false, "solution_steps": ["回顾灵敏度的含义：输出变化量与对应输入变化量的比值。", "比较灵敏度与测量误差：资料明确二者属于不同指标，高灵敏度不保证小误差。", "因此命题中的“一定”不成立，应判断为错误。"], "explanation": "灵敏度描述输入变化引起多大输出变化，不能直接替代测量误差这一指标。本题给出了无条件的必然关系，与资料的“灵敏度高不保证测量误差小”不一致。", "checkpoints": ["结论为错误。", "能解释灵敏度和误差不是同一指标。"], "common_mistakes": ["把“响应明显”直接等同于“测量准确”。", "忽略命题中“一定”的绝对限制。"]}, {"id": "bool-2", "type": "boolean", "chapter": "第2章 电路基础", "knowledge": ["电阻串联"], "difficulty": "基础", "prompt": "两个相同的理想电阻串联，等效电阻是单个电阻的两倍。", "source_ids": ["s2"], "answer": true, "solution_steps": ["设每个电阻均为 R。", "串联时等效电阻相加，R总=R+R=2R，因此命题正确。"], "explanation": "本题讨论的是两个相同理想电阻的串联等效电阻。由串联电阻相加可得到单个电阻的两倍，这与资料的结论一致。", "checkpoints": ["明确连接方式是串联。", "明确两只电阻的阻值相同。"], "common_mistakes": ["套用并联等效电阻结论。", "把等效电阻增大两倍误说成电流一定增大两倍。"]}, {"id": "choice-1", "type": "choice", "chapter": "第1章 传感器基础", "knowledge": ["传感器组成"], "difficulty": "基础", "prompt": "哪个部分直接感受被测量？", "source_ids": ["s1"], "multiple": false, "options": [{"id": "A", "text": "敏感元件"}, {"id": "B", "text": "显示屏"}, {"id": "C", "text": "外部通信网络"}], "answer": ["A"], "solution_steps": ["抓住题干中的“直接感受被测量”。", "资料把这一功能归于敏感元件，因此选择 A。"], "explanation": "敏感元件直接响应被测量，符合题意。显示屏用于呈现信息，外部通信网络用于传输信息，均不对应资料给出的直接感受环节。", "checkpoints": ["选择 A。", "能把“直接感受”与敏感元件对应。"], "common_mistakes": ["根据“能看到结果”误选显示屏。", "把信号传输环节当作直接感受环节。"]}, {"id": "choice-2", "type": "choice", "chapter": "第2章 电路基础", "knowledge": ["电功率"], "difficulty": "进阶", "prompt": "对直流稳态理想欧姆电阻，哪些表达式可用于计算其消耗的电功率？（多选）", "source_ids": ["s2"], "multiple": true, "options": [{"id": "A", "text": "P=UI"}, {"id": "B", "text": "P=I²R"}, {"id": "C", "text": "P=U/R"}, {"id": "D", "text": "P=U²/R"}], "answer": ["A", "B", "D"], "solution_steps": ["由 P=UI 可直接确认 A。", "把 U=IR 代入，得到 P=I²R，确认 B。", "把 I=U/R 代入，得到 P=U²/R，确认 D。", "U/R 等于电流 I，不是电功率，排除 C。"], "explanation": "三种功率表达式在本题的理想欧姆电阻和直流稳态条件下等价。C 的表达式 U/R 对应电流，其物理量与功率不同，不能因其含电压和电阻就认为是功率公式。", "checkpoints": ["完整选择 A、B、D。", "能从 P=UI 与欧姆定律推导另外两式。"], "common_mistakes": ["漏选等价的功率表达式。", "将 U/R 与 U²/R 混淆。"]}, {"id": "short-1", "type": "short", "chapter": "第1章 传感器基础", "knowledge": ["传感器组成"], "difficulty": "进阶", "prompt": "分别说明敏感元件和转换元件的作用。", "source_ids": ["s1"], "answer": "敏感元件直接感受被测量；转换元件把敏感元件的输出转换成适于传输、处理的信号。", "solution_steps": ["先说明敏感元件的对象与动作：直接感受被测量。", "再说明转换元件的输入与动作：接收前一环节输出并转换信号。", "补充转换后的用途：便于后续传输和处理。"], "explanation": "本题要求分别解释两个功能环节，不能只写出元件名称。回答应体现“被测量→敏感元件→转换元件→便于传输处理的信号”这一功能顺序。只要保持这两个作用及对应关系，正确等价表述也可用于自查。", "checkpoints": ["明确敏感元件直接感受被测量。", "明确转换元件转换敏感元件的输出。", "说明转换是为了得到适于传输、处理的信号。"], "common_mistakes": ["把两种元件的作用对调。", "只列元件名称而未解释作用。", "写“没有转换作用”等否定表述却认为提到关键词就符合答案。"]}, {"id": "short-2", "type": "short", "chapter": "第1章 传感器基础", "knowledge": ["灵敏度"], "difficulty": "进阶", "prompt": "简述线性传感器灵敏度的含义，并写出用增量表示的公式。", "source_ids": ["s1"], "answer": "灵敏度是输出变化量与对应输入变化量的比值。在线性区间内，可表示为 K=Δy/Δx，其中 Δy 为输出变化量，Δx 为输入变化量。", "solution_steps": ["分别定义输出增量 Δy 与输入增量 Δx。", "按输出增量除以对应输入增量，写出 K=Δy/Δx。", "注明该表达讨论线性区间，避免把未给条件的非线性情况混为一谈。"], "explanation": "灵敏度关注输入变化带来的输出变化程度，因此分子为输出增量、分母为输入增量。在线性区间该比值为常数。文字定义、公式和符号解释应保持一致。", "checkpoints": ["包含输出变化量与输入变化量的比值这一含义。", "公式 K=Δy/Δx 的分子、分母正确。", "说明 Δy、Δx 的对应物理含义。"], "common_mistakes": ["把公式写成 Δx/Δy。", "只写公式，未解释符号。", "将灵敏度直接解释为测量误差大小。"]}, {"id": "calc-1", "type": "calculation", "chapter": "第2章 电路基础", "knowledge": ["欧姆定律"], "difficulty": "基础", "prompt": "理想电阻 R=6 Ω，两端直流电压 U=12 V。求电流 I，写出计算过程与单位。", "source_ids": ["s2"], "answer": "I=U/R=12/6=2 A。", "solution_steps": ["本题满足理想欧姆电阻条件，采用 U=IR。", "移项得到 I=U/R。", "代入 U=12 V、R=6 Ω，计算 I=12/6=2 A。"], "explanation": "电压和电阻已给定，要求电流，应使用电流等于电压除以电阻这一变形。数值 12÷6=2，单位 V/Ω 为 A。最终结果需要把数值与单位一起写出。", "checkpoints": ["使用 I=U/R。", "代入数值的位置正确。", "结果为 2 A，包含电流单位。"], "common_mistakes": ["把公式写成 I=UR。", "算出 2 后漏写 A。", "未经换算把 2 A 写成 2 mA。"]}, {"id": "calc-2", "type": "calculation", "chapter": "第2章 电路基础", "knowledge": ["电功率", "欧姆定律"], "difficulty": "综合", "prompt": "理想电阻 R=6 Ω，两端直流电压 U=12 V。求其电功率，写出公式、代入步骤和单位。", "source_ids": ["s2"], "answer": "P=U²/R=12²/6=24 W。也可先求 I=2 A，再由 P=UI=12×2=24 W。", "solution_steps": ["已知电压和电阻，可直接选用 P=U²/R。", "代入 U=12 V、R=6 Ω，先计算 12²=144。", "再计算 144/6=24，得到 P=24 W。", "等价解法：先由 I=U/R 求 I=2 A，再计算 P=UI=12×2=24 W。"], "explanation": "本题在理想欧姆电阻的直流稳态条件下，可用 P=UI 与欧姆定律得到 P=U²/R。已知量为 U、R 时直接使用后式较方便；先求电流再求功率同样正确。重点检查电压是否平方、除法运算是否正确，以及最终单位是否为瓦特。", "checkpoints": ["选择适用的电功率公式。", "代入时计算电压平方或正确求得电流。", "最终答案为 24 W，能解释等价解法。"], "common_mistakes": ["漏掉电压平方，误算 12/6。", "把电流单位 A 当作功率单位。", "只给最终数字，无法核对公式和代入过程。"]}], "fingerprint": "9ef458b6e9987fe6b9bf4b10"}</script>
-<script>/* Reference display and learner self-assessment only; no scoring or model calls. */
+<script>/* Local right/wrong checks for objective answers; no numeric scores or model calls. */
 (function (root) {
   'use strict';
   function reference(q) {
@@ -44,7 +44,10 @@
     if (q.type === 'boolean') return q.answer ? '正确' : '错误';
     return q.answer;
   }
-  const fresh = bank => ({version: 3, fingerprint: bank.fingerprint, drafts: {}, revealed: {}, viewed: {}, marks: {}, history: []});
+  const objective = q => ['choice', 'fill', 'boolean'].includes(q.type);
+  // Fold fullwidth ASCII only; preserve case, symbols, internal spaces and superscripts.
+  const normalizeAnswer = value => String(value ?? '').normalize('NFC').replace(/[\uFF01-\uFF5E]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace(/\u3000/g, ' ').trim();
+  const fresh = bank => ({version: 4, fingerprint: bank.fingerprint, drafts: {}, revealed: {}, viewed: {}, marks: {}, judgments: {}, history: []});
   function validDraft(q, a) {
     if (q.type === 'choice') return Array.isArray(a) && new Set(a).size === a.length && a.every(id => q.options.some(o => o.id === id)) && (q.multiple || a.length <= 1);
     if (q.type === 'boolean') return typeof a === 'boolean';
@@ -52,17 +55,54 @@
     return typeof a === 'string' && a.length <= 20000;
   }
   function restore(bank, raw) {
-    if (!raw || raw.version !== 3 || raw.fingerprint !== bank.fingerprint) throw new Error('需要同一题库的新版自评进度；旧评分或批改记录不能直接导入。');
+    if (!raw || ![3,4].includes(raw.version) || raw.fingerprint !== bank.fingerprint) throw new Error('需要同一题库的学习进度；旧评分或批改记录不能直接导入。');
     const state = fresh(bank); const ids = new Set(bank.questions.map(q => q.id));
     for (const q of bank.questions) {
       if (validDraft(q, raw.drafts?.[q.id])) state.drafts[q.id] = raw.drafts[q.id];
       if (raw.revealed?.[q.id] === true) state.revealed[q.id] = true;
       if (raw.viewed?.[q.id] === true || state.revealed[q.id]) state.viewed[q.id] = true;
       if (['mastered', 'review'].includes(raw.marks?.[q.id])) {state.marks[q.id] = raw.marks[q.id]; state.viewed[q.id] = true;}
+      const saved = raw.judgments?.[q.id];
+      if (objective(q) && saved?.answerKey === JSON.stringify(state.drafts[q.id])) {
+        const result = judge(q, state.drafts[q.id]);
+        if (result) {state.judgments[q.id] = {...result, answerKey: saved.answerKey}; delete state.marks[q.id];}
+      }
     }
     state.history = [...new Set((Array.isArray(raw.history) ? raw.history : []).filter(id => ids.has(id)))];
     for (const [id, mark] of Object.entries(state.marks)) if (mark === 'review' && !state.history.includes(id)) state.history.push(id);
+    for (const [id, result] of Object.entries(state.judgments)) if (!result.correct && !state.history.includes(id)) state.history.push(id);
     return state;
+  }
+  function ready(q, answer) {
+    if (!validDraft(q, answer)) return false;
+    if (q.type === 'choice') return answer.length > 0;
+    if (q.type === 'fill') return answer.every(value => normalizeAnswer(value).length > 0);
+    return true;
+  }
+  function judge(q, answer) {
+    if (!objective(q) || !ready(q, answer)) return null;
+    if (q.type === 'choice') {
+      const actual = [...answer].sort(), expected = [...q.answer].sort();
+      return {correct: JSON.stringify(actual) === JSON.stringify(expected), details: []};
+    }
+    if (q.type === 'boolean') return {correct: answer === q.answer, details: []};
+    const details = q.answer.map((aliases, i) => ({blank: i + 1, correct: aliases.some(alias => normalizeAnswer(alias) === normalizeAnswer(answer[i]))}));
+    return {correct: details.every(d => d.correct), details};
+  }
+  function submit(state, q, answer) {
+    const result = judge(q, answer);
+    if (!validDraft(q, answer) || (objective(q) && !result)) return false;
+    state.drafts[q.id] = answer; state.revealed[q.id] = true; state.viewed[q.id] = true;
+    if (result) {
+      state.judgments[q.id] = {...result, answerKey: JSON.stringify(answer)}; delete state.marks[q.id];
+      if (!result.correct && !state.history.includes(q.id)) state.history.push(q.id);
+    }
+    return true;
+  }
+  function edit(state, q, answer) {
+    if (!validDraft(q, answer)) return;
+    state.drafts[q.id] = answer;
+    delete state.revealed[q.id]; delete state.marks[q.id]; delete state.judgments[q.id];
   }
   function mark(state, id, value) {
     if (!['mastered', 'review'].includes(value)) throw new Error('无效的自评状态');
@@ -70,14 +110,16 @@
     if (value === 'review' && !state.history.includes(id)) state.history.push(id);
   }
   function retry(state) {
-    state.history.forEach(id => {delete state.drafts[id]; delete state.revealed[id]; delete state.viewed[id]; delete state.marks[id];});
+    state.history.forEach(id => {delete state.drafts[id]; delete state.revealed[id]; delete state.viewed[id]; delete state.marks[id]; delete state.judgments[id];});
   }
   function stats(state) {
+    const mastered = id => state.judgments[id] ? state.judgments[id].correct : state.marks[id] === 'mastered';
+    const ids = new Set([...Object.keys(state.judgments), ...Object.keys(state.marks)]);
     return {viewed: Object.values(state.viewed).filter(Boolean).length,
-      mastered: Object.values(state.marks).filter(m => m === 'mastered').length,
-      review: state.history.filter(id => state.marks[id] !== 'mastered').length};
+      mastered: [...ids].filter(mastered).length,
+      review: state.history.filter(id => !mastered(id)).length};
   }
-  root.FinalHelpStudy = {reference, fresh, validDraft, restore, mark, retry, stats};
+  root.FinalHelpStudy = {reference, fresh, validDraft, restore, mark, retry, stats, objective, normalizeAnswer, ready, judge, submit, edit};
   if (typeof module !== 'undefined' && module.exports) module.exports = root.FinalHelpStudy;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
 </script>
@@ -116,19 +158,27 @@
   }
   function explanation(q, article) {
     article.querySelector('.result')?.remove(); if (!state.revealed[q.id]) return;
-    const box = create('div', undefined, 'result reference'); box.setAttribute('aria-live', 'polite');
+    const judgment = state.judgments[q.id];
+    const box = create('div', undefined, `result reference${judgment ? judgment.correct ? ' good' : ' bad' : ''}`); box.setAttribute('aria-live', 'polite');
+    if (judgment) {
+      box.append(create('strong', judgment.correct ? '回答正确' : '答案有误，已自动加入错题'));
+      if (judgment.details.length) box.append(create('p', judgment.details.map(d => `第 ${d.blank} 空：${d.correct ? '✓ 正确' : '✗ 与预设答案不一致'}`).join('\n')));
+    }
     box.append(create('strong', '参考答案'), create('p', S.reference(q)));
     list(box, '解题步骤', q.solution_steps, true);
     box.append(create('h4', '详细解析'), create('p', q.explanation));
     list(box, '自查要点', q.checkpoints); list(box, '易错点', q.common_mistakes);
     const sources = create('details'); sources.append(create('summary', '查看资料依据'));
     q.source_ids.forEach(id => {const s = bank.sources.find(s => s.id === id); sources.append(create('p', `${s.title} · ${s.locator}\n${s.excerpt}`));}); box.append(sources);
-    const actions = create('div', undefined, 'self-actions');
-    for (const [value, text] of [['mastered', '我已掌握'], ['review', '加入错题']]) {
-      const button = create('button', text); button.type = 'button'; button.setAttribute('aria-pressed', String(state.marks[q.id] === value));
-      button.addEventListener('click', () => {S.mark(state, q.id, value); save(); stats(); explanation(q, article);}); actions.append(button);
+    if (!S.objective(q)) {
+      const actions = create('div', undefined, 'self-actions');
+      for (const [value, text] of [['mastered', '我已掌握'], ['review', '加入错题']]) {
+        const button = create('button', text); button.type = 'button'; button.setAttribute('aria-pressed', String(state.marks[q.id] === value));
+        button.addEventListener('click', () => {S.mark(state, q.id, value); save(); stats(); explanation(q, article);}); actions.append(button);
+      }
+      box.append(actions);
     }
-    box.append(actions, create('p', '答案与解析由出题 AI 在生成题库时准备；掌握情况由你自评。', 'reference-note'));
+    box.append(create('p', S.objective(q) ? '按原出题 AI 预设的答案本地核对，不显示分数；填空以给定答案及别名为准。' : '答案与解析由出题 AI 在生成题库时准备；本题由你自行对照。', 'reference-note'));
     article.append(box);
   }
   function card(q, index) {
@@ -155,17 +205,18 @@
       const input = create('textarea'); input.placeholder = q.type === 'calculation' ? '先写出公式、计算步骤和单位，再查看固定答案与解法' : '先写下你的理解，再对照参考答案与自查要点';
       input.setAttribute('aria-label', `第 ${index + 1} 题答案`); input.maxLength = 20000; input.value = draft || ''; controls.append(input); read = () => input.value;
     }
-    const button = create('button', state.revealed[q.id] ? '收起解析' : '查看答案与解析', 'submit'); button.type = 'submit';
+    const label = () => state.revealed[q.id] ? '收起解析' : S.objective(q) ? '核对答案与解析' : '查看答案与解析';
+    const button = create('button', label(), 'submit'); button.type = 'submit';
+    button.disabled = !state.revealed[q.id] && S.objective(q) && !S.ready(q, read());
     controls.addEventListener('input', () => {
-      const answer = read(); if (S.validDraft(q, answer)) state.drafts[q.id] = answer;
-      delete state.revealed[q.id]; delete state.marks[q.id]; button.textContent = '查看答案与解析'; explanation(q, article); stats(); save();
+      S.edit(state, q, read()); button.textContent = label(); button.disabled = S.objective(q) && !S.ready(q, read()); explanation(q, article); stats(); save();
     });
     form.append(controls, button); article.append(form); explanation(q, article);
     form.addEventListener('submit', event => {
-      event.preventDefault(); const answer = read(); if (S.validDraft(q, answer)) state.drafts[q.id] = answer;
-      if (state.revealed[q.id]) {delete state.revealed[q.id]; button.textContent = '查看答案与解析';}
-      else {state.revealed[q.id] = true; state.viewed[q.id] = true; button.textContent = '收起解析';}
-      explanation(q, article); stats(); save();
+      event.preventDefault();
+      if (state.revealed[q.id]) delete state.revealed[q.id];
+      else if (!S.submit(state, q, read())) return;
+      button.textContent = label(); button.disabled = !state.revealed[q.id] && S.objective(q) && !S.ready(q, read()); explanation(q, article); stats(); save();
     });
     return article;
   }
@@ -177,7 +228,7 @@
     $('pageInfo').textContent = `${filtered.length} 题 · 第 ${view.page + 1}/${pages} 页`; $('pageLabel').textContent = `${view.page + 1} / ${pages}`;
     $('prev').disabled = view.page === 0; $('next').disabled = view.page >= pages - 1;
     $('questions').replaceChildren(...filtered.slice(view.page * pageSize, (view.page + 1) * pageSize).map(q => card(q, bank.questions.indexOf(q))));
-    if (!filtered.length) $('questions').append(create('p', view.wrong ? '没有符合筛选条件的错题，可在查看解析后自行加入。' : '没有符合条件的题目，请调整筛选。', 'empty'));
+    if (!filtered.length) $('questions').append(create('p', view.wrong ? '没有符合条件的错题。选择、填空和判断题答错会自动加入。' : '没有符合条件的题目，请调整筛选。', 'empty'));
     stats();
   }
   ['chapter', 'knowledge'].forEach(id => $(id).addEventListener('change', () => {view[id] = $(id).value; view.page = 0; render();}));
@@ -190,7 +241,7 @@
   });
   $('export').addEventListener('click', () => {
     const url = URL.createObjectURL(new Blob([JSON.stringify(state, null, 2)], {type: 'application/json'}));
-    const a = create('a'); a.href = url; a.download = `${bank.id.replace(/[^a-z0-9_-]/gi, '_')}.answers.json`; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); notify('已导出学习进度和自评记录。');
+    const a = create('a'); a.href = url; a.download = `${bank.id.replace(/[^a-z0-9_-]/gi, '_')}.answers.json`; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); notify('已导出学习进度、核对结果和自评记录。');
   });
   $('import').addEventListener('click', () => $('importFile').click());
   $('importFile').addEventListener('change', async () => {

@@ -12,7 +12,7 @@
   <header><div class="eyebrow">BUCT FINALHELP <span>资料驱动 · 即时反馈</span></div><h1 id="title"></h1><p id="subtitle"></p></header>
   <section class="stats" aria-label="学习统计">
     <div><strong id="completed">0</strong><span>已查看解析</span></div>
-    <div><strong id="correct">0</strong><span>已掌握（自评）</span></div>
+    <div><strong id="correct">0</strong><span>已掌握</span></div>
     <div><strong id="wrong">0</strong><span>待复习</span></div>
   </section>
   <progress id="progress" max="1" value="0" aria-label="答题进度"></progress>
@@ -22,12 +22,12 @@
     <select id="knowledge" aria-label="知识点筛选"></select>
     <label class="check"><input id="onlyWrong" type="checkbox">只看错题</label>
   </section>
-  <div class="toolbar"><span id="mode">答案与解析由出题 AI 预先准备 · 点击即看 · 无需在线批改</span><div><button id="export" class="text-button">导出进度</button><button id="import" class="text-button">导入进度</button><button id="retry" class="text-button">重练错题</button></div></div>
+  <div class="toolbar"><span id="mode">选择、填空、判断自动核对并收录错题 · 简答、计算自行对照 · 不显示分数</span><div><button id="export" class="text-button">导出进度</button><button id="import" class="text-button">导入进度</button><button id="retry" class="text-button">重练错题</button></div></div>
   <p id="notice" class="notice" role="status" aria-live="polite"></p>
   <div class="list-heading"><h2 id="sectionTitle">全部题目</h2><span id="pageInfo"></span></div>
   <section id="questions" aria-label="练习题目"></section>
   <nav class="pagination" aria-label="分页"><button id="prev">上一页</button><span id="pageLabel"></span><button id="next">下一页</button></nav>
-  <footer>BUCT FinalHelp · 原出题 AI 已备好固定答案与解析 · 不显示分数<br><span>掌握情况由你自评，学习记录保存在当前浏览器。</span></footer>
+  <footer>BUCT FinalHelp · 原出题 AI 已备好固定答案与解析 · 不显示分数<br><span>选择、填空、判断自动核对；简答、计算自评。学习记录保存在当前浏览器。</span></footer>
 </main>
 <input type="file" id="importFile" accept="application/json,.json" hidden>
 <script id="bank" type="application/json">/*BANK*/</script>

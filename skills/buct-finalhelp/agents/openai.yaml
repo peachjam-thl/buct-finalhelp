@@ -1,4 +1,4 @@
 interface:
   display_name: "BUCT FinalHelp 期末刷题助手"
-  short_description: "原 AI 出题时备好固定答案与解析，五类题型点击即看，无分数，默认浏览器打开。"
-  default_prompt: "使用 $buct-finalhelp 分析资料并生成五类互动题，同时备好固定答案和详细解析，在本地默认浏览器打开，不显示分数。"
+  short_description: "原 AI 预设答案与解析，选择填空判断自动收录错题，简答计算自评，无分数。"
+  default_prompt: "使用 $buct-finalhelp 分析资料并生成五类互动题，预先备好答案与解析；选择填空判断自动核对并加入错题，无分数，默认浏览器打开。"

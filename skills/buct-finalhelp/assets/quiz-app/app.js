@@ -33,19 +33,27 @@
   }
   function explanation(q, article) {
     article.querySelector('.result')?.remove(); if (!state.revealed[q.id]) return;
-    const box = create('div', undefined, 'result reference'); box.setAttribute('aria-live', 'polite');
+    const judgment = state.judgments[q.id];
+    const box = create('div', undefined, `result reference${judgment ? judgment.correct ? ' good' : ' bad' : ''}`); box.setAttribute('aria-live', 'polite');
+    if (judgment) {
+      box.append(create('strong', judgment.correct ? '回答正确' : '答案有误，已自动加入错题'));
+      if (judgment.details.length) box.append(create('p', judgment.details.map(d => `第 ${d.blank} 空：${d.correct ? '✓ 正确' : '✗ 与预设答案不一致'}`).join('\n')));
+    }
     box.append(create('strong', '参考答案'), create('p', S.reference(q)));
     list(box, '解题步骤', q.solution_steps, true);
     box.append(create('h4', '详细解析'), create('p', q.explanation));
     list(box, '自查要点', q.checkpoints); list(box, '易错点', q.common_mistakes);
     const sources = create('details'); sources.append(create('summary', '查看资料依据'));
     q.source_ids.forEach(id => {const s = bank.sources.find(s => s.id === id); sources.append(create('p', `${s.title} · ${s.locator}\n${s.excerpt}`));}); box.append(sources);
-    const actions = create('div', undefined, 'self-actions');
-    for (const [value, text] of [['mastered', '我已掌握'], ['review', '加入错题']]) {
-      const button = create('button', text); button.type = 'button'; button.setAttribute('aria-pressed', String(state.marks[q.id] === value));
-      button.addEventListener('click', () => {S.mark(state, q.id, value); save(); stats(); explanation(q, article);}); actions.append(button);
+    if (!S.objective(q)) {
+      const actions = create('div', undefined, 'self-actions');
+      for (const [value, text] of [['mastered', '我已掌握'], ['review', '加入错题']]) {
+        const button = create('button', text); button.type = 'button'; button.setAttribute('aria-pressed', String(state.marks[q.id] === value));
+        button.addEventListener('click', () => {S.mark(state, q.id, value); save(); stats(); explanation(q, article);}); actions.append(button);
+      }
+      box.append(actions);
     }
-    box.append(actions, create('p', '答案与解析由出题 AI 在生成题库时准备；掌握情况由你自评。', 'reference-note'));
+    box.append(create('p', S.objective(q) ? '按原出题 AI 预设的答案本地核对，不显示分数；填空以给定答案及别名为准。' : '答案与解析由出题 AI 在生成题库时准备；本题由你自行对照。', 'reference-note'));
     article.append(box);
   }
   function card(q, index) {
@@ -72,17 +80,18 @@
       const input = create('textarea'); input.placeholder = q.type === 'calculation' ? '先写出公式、计算步骤和单位，再查看固定答案与解法' : '先写下你的理解，再对照参考答案与自查要点';
       input.setAttribute('aria-label', `第 ${index + 1} 题答案`); input.maxLength = 20000; input.value = draft || ''; controls.append(input); read = () => input.value;
     }
-    const button = create('button', state.revealed[q.id] ? '收起解析' : '查看答案与解析', 'submit'); button.type = 'submit';
+    const label = () => state.revealed[q.id] ? '收起解析' : S.objective(q) ? '核对答案与解析' : '查看答案与解析';
+    const button = create('button', label(), 'submit'); button.type = 'submit';
+    button.disabled = !state.revealed[q.id] && S.objective(q) && !S.ready(q, read());
     controls.addEventListener('input', () => {
-      const answer = read(); if (S.validDraft(q, answer)) state.drafts[q.id] = answer;
-      delete state.revealed[q.id]; delete state.marks[q.id]; button.textContent = '查看答案与解析'; explanation(q, article); stats(); save();
+      S.edit(state, q, read()); button.textContent = label(); button.disabled = S.objective(q) && !S.ready(q, read()); explanation(q, article); stats(); save();
     });
     form.append(controls, button); article.append(form); explanation(q, article);
     form.addEventListener('submit', event => {
-      event.preventDefault(); const answer = read(); if (S.validDraft(q, answer)) state.drafts[q.id] = answer;
-      if (state.revealed[q.id]) {delete state.revealed[q.id]; button.textContent = '查看答案与解析';}
-      else {state.revealed[q.id] = true; state.viewed[q.id] = true; button.textContent = '收起解析';}
-      explanation(q, article); stats(); save();
+      event.preventDefault();
+      if (state.revealed[q.id]) delete state.revealed[q.id];
+      else if (!S.submit(state, q, read())) return;
+      button.textContent = label(); button.disabled = !state.revealed[q.id] && S.objective(q) && !S.ready(q, read()); explanation(q, article); stats(); save();
     });
     return article;
   }
@@ -94,7 +103,7 @@
     $('pageInfo').textContent = `${filtered.length} 题 · 第 ${view.page + 1}/${pages} 页`; $('pageLabel').textContent = `${view.page + 1} / ${pages}`;
     $('prev').disabled = view.page === 0; $('next').disabled = view.page >= pages - 1;
     $('questions').replaceChildren(...filtered.slice(view.page * pageSize, (view.page + 1) * pageSize).map(q => card(q, bank.questions.indexOf(q))));
-    if (!filtered.length) $('questions').append(create('p', view.wrong ? '没有符合筛选条件的错题，可在查看解析后自行加入。' : '没有符合条件的题目，请调整筛选。', 'empty'));
+    if (!filtered.length) $('questions').append(create('p', view.wrong ? '没有符合条件的错题。选择、填空和判断题答错会自动加入。' : '没有符合条件的题目，请调整筛选。', 'empty'));
     stats();
   }
   ['chapter', 'knowledge'].forEach(id => $(id).addEventListener('change', () => {view[id] = $(id).value; view.page = 0; render();}));
@@ -107,7 +116,7 @@
   });
   $('export').addEventListener('click', () => {
     const url = URL.createObjectURL(new Blob([JSON.stringify(state, null, 2)], {type: 'application/json'}));
-    const a = create('a'); a.href = url; a.download = `${bank.id.replace(/[^a-z0-9_-]/gi, '_')}.answers.json`; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); notify('已导出学习进度和自评记录。');
+    const a = create('a'); a.href = url; a.download = `${bank.id.replace(/[^a-z0-9_-]/gi, '_')}.answers.json`; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); notify('已导出学习进度、核对结果和自评记录。');
   });
   $('import').addEventListener('click', () => $('importFile').click());
   $('importFile').addEventListener('change', async () => {
