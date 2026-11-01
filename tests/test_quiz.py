@@ -35,6 +35,14 @@ class QuizTests(unittest.TestCase):
         self.bank['questions'][0]['answer'][0]=['修改答案']
         self.assertNotEqual(before,fingerprint(self.bank))
 
+    def test_generic_portal_contains_an_optional_demo_and_all_offline_math_resources(self):
+        page=build_html(None,self.bank)
+        self.assertIn('id="bank" type="application/json">null</script>',page)
+        self.assertIn('id="demoBank"',page)
+        self.assertIn('复制给 AI 的修正说明',page)
+        self.assertIn('font/woff2;base64,',page)
+        self.assertNotIn('url(fonts/',page)
+
     def test_untrusted_material_remains_data(self):
         payload='</script><script>alert(1)</script> /*APP*/'
         self.bank['questions'][0]['prompt']=payload
@@ -49,7 +57,7 @@ class QuizTests(unittest.TestCase):
             def handle_data(self,data):
                 if self.in_bank:self.bank_text+=data
         p=Parser();p.feed(page)
-        self.assertEqual(p.scripts,3)
+        self.assertEqual(p.scripts,build_html(load_bank(ROOT/'examples/demo-bank.json')).count('<script'))
         self.assertEqual(json.loads(p.bank_text)['questions'][0]['prompt'],payload)
         self.assertIn('解题步骤',page)
 
@@ -59,7 +67,9 @@ class QuizTests(unittest.TestCase):
         try:
             with urllib.request.urlopen(base) as response:
                 page=response.read().decode();self.assertIn("connect-src 'none'",response.headers['Content-Security-Policy'])
-                self.assertIn('I=U/R=12/6=2 A',page)
+                self.assertIn('font/woff2;base64,',page)
+                self.assertNotIn('url(fonts/',page)
+                self.assertIn('拖放题库文件到这里',page)
             with self.assertRaises(urllib.error.HTTPError) as caught:urllib.request.urlopen(urllib.request.Request(base+'/api/submit',data=b'{}'))
             self.assertEqual(caught.exception.code,501)
             for url,headers in [(base+'/.env',{}),(base,{'Host':'evil.invalid'})]:

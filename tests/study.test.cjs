@@ -75,5 +75,5 @@ test('restoring keeps false and partial drafts but rejects old scores and a diff
   const s=S.fresh(bank); s.drafts['bool-1']=false; s.drafts['fill-1']=['','','']; S.mark(s,'fill-1','mastered'); delete s.revealed['fill-1'];
   const restored=S.restore(bank,JSON.parse(JSON.stringify(s)));
   assert.equal(restored.drafts['bool-1'],false); assert.equal(restored.revealed['fill-1'],undefined); assert.equal(S.stats(restored).viewed,1);
-  assert.throws(()=>S.restore(bank,{...s,version:1})); assert.throws(()=>S.restore(bank,{...s,fingerprint:'other'}));
+  assert.throws(()=>S.restore(bank,{...s,version:1})); assert.throws(()=>S.restore(bank,{...s,bank_id:'other-course'}));
 });

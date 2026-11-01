@@ -4,12 +4,26 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="color-scheme" content="light">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; font-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
   <title><!--TITLE--></title>
   <style>/*STYLE*/</style>
 </head>
 <body>
 <main class="shell">
-  <header><div class="eyebrow">BUCT FINALHELP <span>资料驱动 · 即时反馈</span></div><h1 id="title"></h1><p id="subtitle"></p></header>
+  <header><div class="eyebrow">BUCT FINALHELP <span>资料驱动 · 即时反馈</span></div><h1 id="title">BUCT FinalHelp 互动刷题</h1><p id="subtitle">把常用 AI 生成的题库导入这里，就能开始练习。无需安装环境或配置密钥。</p></header>
+  <details id="importPanel" class="import-panel" open>
+    <summary>导入或追加题库</summary>
+    <p>选择题库文件，或粘贴 AI 返回的题库内容。资料和答题记录仅保存在当前浏览器，不会上传。</p>
+    <div class="import-grid">
+      <div id="dropZone" class="drop-zone" tabindex="0" role="button" aria-label="拖放或选择题库文件"><strong>拖放题库文件到这里</strong><span>支持 JSON、TXT、Markdown；每份最多 10 MB</span><button id="chooseBank" type="button">选择题库文件</button></div>
+      <div class="paste-area"><label for="bankPaste">或粘贴 AI 输出</label><textarea id="bankPaste" placeholder="直接粘贴完整题库或 JSON 代码块，不需要自己修改格式。"></textarea><button id="importPaste" type="button">检查并导入</button></div>
+    </div>
+    <div class="import-options"><label for="importMode">导入方式</label><select id="importMode"><option value="replace">替换当前题库（保留未改题目的进度）</option><option value="append">追加到当前课程（跳过完全重复题）</option></select><button id="loadDemo" type="button">体验示例题库</button><button id="exportBank" type="button" disabled>导出当前题库</button><button id="downloadOffline" type="button">下载离线练习页</button></div>
+    <p id="libraryStatus" class="library-status" role="status"></p>
+    <section id="importReport" class="import-report" hidden aria-label="题库检查结果"><h2 id="reportTitle"></h2><ul id="issueList"></ul><div class="report-actions"><button id="copyRepair" type="button">复制给 AI 的修正说明</button><button id="downloadRepair" type="button">下载修正说明</button></div><textarea id="repairText" readonly hidden aria-label="给 AI 的修正说明"></textarea></section>
+  </details>
+  <p id="notice" class="notice" role="status" aria-live="polite"></p>
+  <section id="practice" hidden>
   <section class="stats" aria-label="学习统计">
     <div><strong id="completed">0</strong><span>已查看解析</span></div>
     <div><strong id="correct">0</strong><span>已掌握</span></div>
@@ -23,14 +37,20 @@
     <label class="check"><input id="onlyWrong" type="checkbox">只看错题</label>
   </section>
   <div class="toolbar"><span id="mode">选择、填空、判断自动核对并收录错题 · 简答、计算自行对照 · 不显示分数</span><div><button id="export" class="text-button">导出进度</button><button id="import" class="text-button">导入进度</button><button id="retry" class="text-button">重练错题</button></div></div>
-  <p id="notice" class="notice" role="status" aria-live="polite"></p>
   <div class="list-heading"><h2 id="sectionTitle">全部题目</h2><span id="pageInfo"></span></div>
   <section id="questions" aria-label="练习题目"></section>
   <nav class="pagination" aria-label="分页"><button id="prev">上一页</button><span id="pageLabel"></span><button id="next">下一页</button></nav>
+  </section>
   <footer>BUCT FinalHelp · 原出题 AI 已备好固定答案与解析 · 不显示分数<br><span>选择、填空、判断自动核对；简答、计算自评。学习记录保存在当前浏览器。</span></footer>
 </main>
 <input type="file" id="importFile" accept="application/json,.json" hidden>
+<input type="file" id="bankFile" accept="application/json,text/plain,.json,.txt,.md" multiple hidden>
 <script id="bank" type="application/json">/*BANK*/</script>
+<script id="demoBank" type="application/json">/*DEMO*/</script>
+<script>/*KATEX*/</script>
+<script>/*MATH*/</script>
+<script>/*BANKTOOLS*/</script>
+<script>/*STORAGE*/</script>
 <script>/*CORE*/</script>
 <script>/*APP*/</script>
 </body>

@@ -1,16 +1,19 @@
 /* Local right/wrong checks for objective answers; no numeric scores or model calls. */
 (function (root) {
   'use strict';
+  const Banks=root.FinalHelpBank||(typeof require==='function'?require('./bank.js'):null);
   function reference(q) {
     if (q.type === 'choice') return q.answer.map(id => `${id}. ${q.options.find(o => o.id === id).text}`).join('；');
-    if (q.type === 'fill') return q.answer.map((aliases, i) => `第 ${i + 1} 空：${aliases.join(' / ')}`).join('\n');
+    if (q.type === 'fill') return q.answer.map((aliases, i) => `第 ${i + 1} 空：${q.answer_display?.[i] || aliases.join(' / ')}`).join('\n');
     if (q.type === 'boolean') return q.answer ? '正确' : '错误';
     return q.answer;
   }
   const objective = q => ['choice', 'fill', 'boolean'].includes(q.type);
   // Fold fullwidth ASCII only; preserve case, symbols, internal spaces and superscripts.
   const normalizeAnswer = value => String(value ?? '').normalize('NFC').replace(/[\uFF01-\uFF5E]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace(/\u3000/g, ' ').trim();
-  const fresh = bank => ({version: 4, fingerprint: bank.fingerprint, drafts: {}, revealed: {}, viewed: {}, marks: {}, judgments: {}, history: []});
+  const fresh = bank => ({version: 5, bank_id:bank.id, fingerprint: bank.fingerprint,
+    question_fingerprints:Object.fromEntries(bank.questions.map(q=>[q.id,Banks.questionFingerprint(bank,q)])),
+    drafts: {}, revealed: {}, viewed: {}, marks: {}, judgments: {}, history: []});
   function validDraft(q, a) {
     if (q.type === 'choice') return Array.isArray(a) && new Set(a).size === a.length && a.every(id => q.options.some(o => o.id === id)) && (q.multiple || a.length <= 1);
     if (q.type === 'boolean') return typeof a === 'boolean';
@@ -18,9 +21,11 @@
     return typeof a === 'string' && a.length <= 20000;
   }
   function restore(bank, raw) {
-    if (!raw || ![3,4].includes(raw.version) || raw.fingerprint !== bank.fingerprint) throw new Error('需要同一题库的学习进度；旧评分或批改记录不能直接导入。');
-    const state = fresh(bank); const ids = new Set(bank.questions.map(q => q.id));
+    const modern=raw?.version===5;
+    if (!raw || (modern?raw.bank_id!==bank.id:(![3,4].includes(raw.version)||raw.fingerprint!==bank.fingerprint))) throw new Error('需要同一课程的学习进度；不同课程不能混用。');
+    const state = fresh(bank); const ids = new Set(bank.questions.filter(q=>!modern||raw.question_fingerprints?.[q.id]===state.question_fingerprints[q.id]).map(q => q.id));
     for (const q of bank.questions) {
+      if(!ids.has(q.id))continue;
       if (validDraft(q, raw.drafts?.[q.id])) state.drafts[q.id] = raw.drafts[q.id];
       if (raw.revealed?.[q.id] === true) state.revealed[q.id] = true;
       if (raw.viewed?.[q.id] === true || state.revealed[q.id]) state.viewed[q.id] = true;
